@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// Tarea programada (cada 5 min): avisa al propietario cuando una visita
-// supera el margen de 90 minutos sin completarse. Una sola vez por visita.
+// Tarea programada (cada hora): avisa al propietario cuando una visita
+// sigue sin completarse 90 minutos después de empezar. El margen cuenta
+// desde visits.started_at (primera tarea realizada), no desde la hora
+// prevista. Una sola vez por visita.
 // El bearer (clave pública del proyecto) solo filtra tráfico espurio:
 // la operación es idempotente y no expone datos.
 
@@ -10,6 +12,7 @@ const DELAY_MINUTES = 90;
 interface OverdueVisit {
   id: string;
   scheduled_at: string;
+  started_at: string;
   plan_id: string;
   plans: {
     title: string;
@@ -33,11 +36,12 @@ export const Route = createFileRoute("/api/public/hooks/visitas-retrasadas")({
         const { data: visits, error } = await supabaseAdmin
           .from("visits")
           .select(
-            "id, scheduled_at, plan_id, plans!inner(status, title, timezone, houses!inner(owner_id, name))",
+            "id, scheduled_at, started_at, plan_id, plans!inner(status, title, timezone, houses!inner(owner_id, name))",
           )
           .in("status", ["pendiente", "en_curso"])
+          .not("started_at", "is", null)
           .is("delay_notified_at", null)
-          .lt("scheduled_at", cutoff)
+          .lt("started_at", cutoff)
           .eq("plans.status", "activo");
 
         if (error) {
@@ -70,7 +74,7 @@ export const Route = createFileRoute("/api/public/hooks/visitas-retrasadas")({
             timeZone: plan.timezone || "Europe/Madrid",
           }).format(new Date(visit.scheduled_at));
 
-          const message = `La visita del ${when} («${plan.title}») sigue sin completarse tras el margen de ${DELAY_MINUTES} minutos.`;
+          const message = `La visita del ${when} («${plan.title}») sigue sin completarse ${DELAY_MINUTES} minutos después de empezar.`;
 
           await supabaseAdmin.from("notifications").insert({
             user_id: owner,
@@ -83,7 +87,7 @@ export const Route = createFileRoute("/api/public/hooks/visitas-retrasadas")({
             plan_id: visit.plan_id,
             actor_id: null,
             type: "visita_retrasada",
-            message: `La visita del ${when} superó el margen de ${DELAY_MINUTES} minutos sin completarse.`,
+            message: `La visita del ${when} superó el margen de ${DELAY_MINUTES} minutos desde su comienzo sin completarse.`,
           });
           notified += 1;
         }

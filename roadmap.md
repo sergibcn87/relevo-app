@@ -26,7 +26,7 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
 - [ ] 4. Cierre automático y avisos
   - [x] Cierre automático al resolver la última tarea (con confirmación previa y anti-duplicados) — hecho en bloque 3
   - [x] Aviso de finalización y de omisiones al propietario (centro de avisos + campana) — hecho en bloque 3 (correo pendiente en bloque 4)
-  - [x] Aviso de retraso: margen 90 min (30+60), una sola vez por visita, tarea programada cada 5 min (ruta /api/public/hooks/visitas-retrasadas + pg_cron → URL de vista previa; al publicar, apuntar el cron a la URL de producción)
+  - [x] Aviso de retraso: margen 90 min desde el primer check del cuidador (visits.started_at, trigger tasks_mark_visit_started), una sola vez por visita, tarea programada cada hora (ruta /api/public/hooks/visitas-retrasadas + pg_cron → URL de vista previa; al publicar, apuntar el cron a la URL de producción)
   - [x] Preferencias de correo en Cuenta + aviso de «correo no configurado» — hecho en bloques 1 y 4
   - [ ] Correo: configurar dominio de envío (requiere dominio del usuario), plantillas y envío gestionado con reintentos automáticos (sin cola propia: el servicio de correo de Lovable reintenta); al activarlo, enviar avisos de finalización/omisiones/retraso según preferencias
 - [ ] 5. IA (crear plan con IA, revisión en dos columnas, trazabilidad de fragmentos, validación en servidor)

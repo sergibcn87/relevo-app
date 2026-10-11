@@ -92,7 +92,8 @@ function AvisosPage() {
           <BellOff className="h-8 w-8 text-primary" aria-hidden />
           <h2 className="text-base font-semibold text-card-foreground">No tienes avisos</h2>
           <p className="max-w-sm text-sm text-muted-foreground">
-            Cuando una visita se complete o supere su margen de 90 minutos, te avisaremos aquí.
+            Cuando una visita se complete o siga sin completarse 90 minutos después de empezar,
+            te avisaremos aquí.
           </p>
         </Card>
       ) : (
