@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { GUIDE_VERSION } from "@/components/guide-tour";
 
 export const Route = createFileRoute("/_authenticated/cuenta")({
   head: () => ({

@@ -107,6 +107,12 @@ function AuthedShell() {
 
   const [tourClosed, setTourClosed] = useState(false);
 
+  // Si la guía se restablece (p. ej. desde Cuenta), vuelve a mostrarse
+  // aunque ya se hubiera cerrado durante esta sesión.
+  useEffect(() => {
+    if (guideStatus === "no_iniciada") setTourClosed(false);
+  }, [guideStatus]);
+
   async function finishTour(status: "completada" | "omitida") {
     setTourClosed(true);
     await supabase.from("guide_states").upsert(
@@ -119,6 +125,9 @@ function AuthedShell() {
       },
       { onConflict: "user_id,role,version" },
     );
+    // Mantiene la caché al día para que un futuro restablecimiento
+    // ("completada" -> "no_iniciada") sea un cambio detectable.
+    queryClient.invalidateQueries({ queryKey: ["guide-state"] });
   }
 
   const showTour = !tourClosed && guideStatus === "no_iniciada";
