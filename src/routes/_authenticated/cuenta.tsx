@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { GUIDE_VERSION } from "@/components/guide-tour";
 
 export const Route = createFileRoute("/_authenticated/cuenta")({
   head: () => ({
@@ -73,18 +74,20 @@ function CuentaPage() {
     const rows = (["propietario", "cuidador"] as const).map((role) => ({
       user_id: user.id,
       role,
-      version: 1,
+      version: GUIDE_VERSION,
       status: "no_iniciada" as const,
       updated_at: new Date().toISOString(),
     }));
     const { error } = await supabase
       .from("guide_states")
       .upsert(rows, { onConflict: "user_id,role,version" });
-    if (error) toast.error("No se ha podido restablecer la guía.");
-    else {
-      queryClient.invalidateQueries({ queryKey: ["guide-state"] });
-      toast.success("La guía se mostrará en un momento.");
+    if (error) {
+      toast.error("No se ha podido restablecer la guía.");
+      return;
     }
+    await queryClient.invalidateQueries({ queryKey: ["guide-state"] });
+    toast.success("La guía comenzará en un momento.");
+    navigate({ to: "/inicio" });
   }
 
   async function handleSignOut() {
