@@ -104,7 +104,7 @@ function AuthPage() {
           password,
           options: {
             data: { display_name: name.trim() },
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(target)}`,
           },
         });
         if (err) {
