@@ -21,6 +21,7 @@ import { Route as AuthenticatedPlanesRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPlanesIaRouteImport } from './routes/_authenticated/planes-ia'
 import { Route as AuthenticatedPlanesNuevoRouteImport } from './routes/_authenticated/planes-nuevo'
 import { Route as AuthenticatedVisitasRouteImport } from './routes/_authenticated/visitas'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as InvitacionTokenRouteImport } from './routes/invitacion.$token'
 import { Route as AuthenticatedPlanesPlanIdRouteImport } from './routes/_authenticated/planes_.$planId'
 import { Route as AuthenticatedVisitasVisitaIdRouteImport } from './routes/_authenticated/visitas_.$visitaId'
@@ -86,6 +87,11 @@ const AuthenticatedVisitasRoute = AuthenticatedVisitasRouteImport.update({
   path: '/visitas',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
 const InvitacionTokenRoute = InvitacionTokenRouteImport.update({
   id: '/invitacion/$token',
   path: '/invitacion/$token',
@@ -112,7 +118,7 @@ const ApiPublicHooksVisitasRetrasadasRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/avisos': typeof AuthenticatedAvisosRoute
   '/cuenta': typeof AuthenticatedCuentaRoute
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/planes-ia': typeof AuthenticatedPlanesIaRoute
   '/planes-nuevo': typeof AuthenticatedPlanesNuevoRoute
   '/visitas': typeof AuthenticatedVisitasRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
@@ -129,7 +136,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/avisos': typeof AuthenticatedAvisosRoute
   '/cuenta': typeof AuthenticatedCuentaRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/planes-ia': typeof AuthenticatedPlanesIaRoute
   '/planes-nuevo': typeof AuthenticatedPlanesNuevoRoute
   '/visitas': typeof AuthenticatedVisitasRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
@@ -148,7 +156,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
   '/_authenticated/cuenta': typeof AuthenticatedCuentaRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/_authenticated/planes-ia': typeof AuthenticatedPlanesIaRoute
   '/_authenticated/planes-nuevo': typeof AuthenticatedPlanesNuevoRoute
   '/_authenticated/visitas': typeof AuthenticatedVisitasRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/_authenticated/planes_/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/_authenticated/visitas_/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/planes-ia'
     | '/planes-nuevo'
     | '/visitas'
+    | '/auth/callback'
     | '/invitacion/$token'
     | '/planes/$planId'
     | '/visitas/$visitaId'
@@ -194,6 +204,7 @@ export interface FileRouteTypes {
     | '/planes-ia'
     | '/planes-nuevo'
     | '/visitas'
+    | '/auth/callback'
     | '/invitacion/$token'
     | '/planes/$planId'
     | '/visitas/$visitaId'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/_authenticated/planes-ia'
     | '/_authenticated/planes-nuevo'
     | '/_authenticated/visitas'
+    | '/auth/callback'
     | '/invitacion/$token'
     | '/_authenticated/planes_/$planId'
     | '/_authenticated/visitas_/$visitaId'
@@ -221,7 +233,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   InvitacionTokenRoute: typeof InvitacionTokenRoute
   ApiPublicHooksVisitasRetrasadasRoute: typeof ApiPublicHooksVisitasRetrasadasRoute
@@ -313,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVisitasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/invitacion/$token': {
       id: '/invitacion/$token'
       path: '/invitacion/$token'
@@ -373,10 +392,20 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   InvitacionTokenRoute: InvitacionTokenRoute,
   ApiPublicHooksVisitasRetrasadasRoute: ApiPublicHooksVisitasRetrasadasRoute,

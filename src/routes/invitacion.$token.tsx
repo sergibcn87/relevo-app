@@ -39,6 +39,14 @@ function InvitacionPage() {
       setUser(data.user);
       setAuthChecked(true);
     });
+    // Si la sesión llega tarde (p. ej. tras confirmar el correo), la recogemos.
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+        setUser(session?.user ?? null);
+        setAuthChecked(true);
+      }
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   const { data: invitation, isLoading } = useQuery({
