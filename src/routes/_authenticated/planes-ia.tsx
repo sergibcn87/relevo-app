@@ -83,6 +83,7 @@ function PlanesIaPage() {
   const [proposalId, setProposalId] = useState<string | null>(null);
   const [proposal, setProposal] = useState<PlanProposal | null>(null);
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ warnings: string[]; questions: string[] } | null>(null);
 
   const { data: houses = [], isLoading: loadingHouses } = useQuery({
     queryKey: ["houses", user.id],
@@ -151,11 +152,12 @@ function PlanesIaPage() {
     setGenerating(false);
     if (!result.ok) {
       toast.error(result.error);
-      if ("warnings" in result && result.warnings?.length) {
-        for (const w of result.warnings) toast.warning(w);
-      }
+      const warnings = "warnings" in result ? (result.warnings ?? []) : [];
+      const questions = "questions" in result ? (result.questions ?? []) : [];
+      setFeedback(warnings.length || questions.length ? { warnings, questions } : null);
       return;
     }
+    setFeedback(null);
     setProposalId(result.proposalId);
     setProposal(result.proposal);
     setPhase("review");
