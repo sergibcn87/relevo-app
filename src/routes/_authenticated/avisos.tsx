@@ -95,7 +95,7 @@ function AvisosPage() {
       ) : (
         <ul className="mt-6 flex flex-col gap-2">
           {notifications.map((notification) => {
-            const config = typeConfig[notification.type];
+            const config = typeConfig[notification.type as keyof typeof typeConfig];
             const Icon = config?.icon ?? Bell;
             return (
               <li key={notification.id}>

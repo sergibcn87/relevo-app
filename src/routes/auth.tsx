@@ -8,14 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
 
-type AuthSearch = { redirect?: string };
+type AuthSearch = { redirect?: string | undefined };
 
 const validateSearch = (search: Record<string, unknown>): AuthSearch => ({
   redirect:
-    typeof search.redirect === "string" &&
-    search.redirect.startsWith("/") &&
-    !search.redirect.startsWith("//")
-      ? search.redirect
+    typeof search["redirect"] === "string" &&
+    search["redirect"].startsWith("/") &&
+    !search["redirect"].startsWith("//")
+      ? search["redirect"]
       : undefined,
 });
 
