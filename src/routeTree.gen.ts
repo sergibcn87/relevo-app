@@ -23,6 +23,7 @@ import { Route as AuthenticatedVisitasRouteImport } from './routes/_authenticate
 import { Route as InvitacionTokenRouteImport } from './routes/invitacion.$token'
 import { Route as AuthenticatedPlanesPlanIdRouteImport } from './routes/_authenticated/planes_.$planId'
 import { Route as AuthenticatedVisitasVisitaIdRouteImport } from './routes/_authenticated/visitas_.$visitaId'
+import { Route as ApiPublicHooksVisitasRetrasadasRouteImport } from './routes/api/public/hooks/visitas-retrasadas'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -96,6 +97,12 @@ const AuthenticatedVisitasVisitaIdRoute =
     path: '/visitas/$visitaId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicHooksVisitasRetrasadasRoute =
+  ApiPublicHooksVisitasRetrasadasRouteImport.update({
+    id: '/api/public/hooks/visitas-retrasadas',
+    path: '/api/public/hooks/visitas-retrasadas',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
+  '/api/public/hooks/visitas-retrasadas': typeof ApiPublicHooksVisitasRetrasadasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -126,6 +134,7 @@ export interface FileRoutesByTo {
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
+  '/api/public/hooks/visitas-retrasadas': typeof ApiPublicHooksVisitasRetrasadasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -143,6 +152,7 @@ export interface FileRoutesById {
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/_authenticated/planes_/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/_authenticated/visitas_/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
+  '/api/public/hooks/visitas-retrasadas': typeof ApiPublicHooksVisitasRetrasadasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/invitacion/$token'
     | '/planes/$planId'
     | '/visitas/$visitaId'
+    | '/api/public/hooks/visitas-retrasadas'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/invitacion/$token'
     | '/planes/$planId'
     | '/visitas/$visitaId'
+    | '/api/public/hooks/visitas-retrasadas'
   id:
     | '__root__'
     | '/'
@@ -191,6 +203,7 @@ export interface FileRouteTypes {
     | '/invitacion/$token'
     | '/_authenticated/planes_/$planId'
     | '/_authenticated/visitas_/$visitaId'
+    | '/api/public/hooks/visitas-retrasadas'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -199,6 +212,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   InvitacionTokenRoute: typeof InvitacionTokenRoute
+  ApiPublicHooksVisitasRetrasadasRoute: typeof ApiPublicHooksVisitasRetrasadasRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -301,6 +315,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVisitasVisitaIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/hooks/visitas-retrasadas': {
+      id: '/api/public/hooks/visitas-retrasadas'
+      path: '/api/public/hooks/visitas-retrasadas'
+      fullPath: '/api/public/hooks/visitas-retrasadas'
+      preLoaderRoute: typeof ApiPublicHooksVisitasRetrasadasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -337,6 +358,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   InvitacionTokenRoute: InvitacionTokenRoute,
+  ApiPublicHooksVisitasRetrasadasRoute: ApiPublicHooksVisitasRetrasadasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
