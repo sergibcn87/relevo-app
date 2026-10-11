@@ -29,6 +29,13 @@
       "when": 1791708094931,
       "tag": "0003_plans_status_add_abierto_completado",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791708343920,
+      "tag": "0004_block3_invitations_caregiver",
+      "breakpoints": true
     }
   ]
 }

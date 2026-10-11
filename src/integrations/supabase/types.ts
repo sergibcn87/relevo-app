@@ -823,6 +823,7 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { _token: string }; Returns: string }
+      close_visit: { Args: { _visit_id: string }; Returns: string }
       invitation_info: {
         Args: { _token: string }
         Returns: {
