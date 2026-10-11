@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
-import { Home, Loader2, MapPin, PawPrint, Users } from "lucide-react";
+import { Home, Loader2, MapPin, PawPrint, Pencil, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { HouseSettings, type HouseSummary } from "@/components/house-settings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +28,7 @@ function InicioPage() {
   const [houseName, setHouseName] = useState("");
   const [houseCity, setHouseCity] = useState("");
   const [saving, setSaving] = useState(false);
+  const [settingsHouse, setSettingsHouse] = useState<HouseSummary | null>(null);
 
   const { data: profile } = useQuery({
     queryKey: ["profile", user.id],
@@ -45,7 +47,7 @@ function InicioPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("houses")
-        .select("id, name, city")
+        .select("id, name, city, rooms")
         .order("created_at", { ascending: true });
       return data ?? [];
     },
@@ -174,6 +176,9 @@ function InicioPage() {
                     <MapPin className="h-4 w-4" aria-hidden /> Ver planes
                   </Button>
                 </Link>
+                <Button variant="ghost" size="sm" onClick={() => setSettingsHouse(house)}>
+                  <Pencil className="h-4 w-4" aria-hidden /> Editar casa
+                </Button>
               </div>
             </Card>
           ))}
@@ -203,6 +208,16 @@ function InicioPage() {
             </Card>
           )}
         </div>
+      )}
+
+      {settingsHouse && (
+        <HouseSettings
+          house={settingsHouse}
+          open={!!settingsHouse}
+          onOpenChange={(open) => {
+            if (!open) setSettingsHouse(null);
+          }}
+        />
       )}
     </div>
   );
