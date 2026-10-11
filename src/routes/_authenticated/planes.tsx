@@ -167,7 +167,7 @@ function PlanesPage() {
             </section>
           )}
 
-          {published.length === 0 && drafts.length === 0 ? (
+          {published.length === 0 && drafts.length === 0 && asCaregiver.length === 0 ? (
             <Card className="flex flex-col items-center gap-3 p-10 text-center animate-fade-up-1">
               <Map className="h-8 w-8 text-primary" aria-hidden />
               <h2 className="text-base font-semibold text-card-foreground">Aún no hay planes</h2>

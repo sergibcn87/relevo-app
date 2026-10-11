@@ -191,14 +191,17 @@ function InicioPage() {
               </div>
               <ul className="mt-3 flex flex-col gap-2">
                 {caregiverPlans.map((plan) => (
-                  <li
-                    key={plan.id}
-                    className="flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3"
-                  >
-                    <span className="text-sm font-medium text-foreground">{plan.title}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {plan.start_date} → {plan.end_date}
-                    </span>
+                  <li key={plan.id}>
+                    <Link
+                      to="/planes/$planId"
+                      params={{ planId: plan.id }}
+                      className="flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 transition-colors hover:bg-secondary/40"
+                    >
+                      <span className="text-sm font-medium text-foreground">{plan.title}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {plan.start_date} → {plan.end_date}
+                      </span>
+                    </Link>
                   </li>
                 ))}
               </ul>

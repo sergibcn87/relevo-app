@@ -22,6 +22,7 @@ import { Route as AuthenticatedPlanesNuevoRouteImport } from './routes/_authenti
 import { Route as AuthenticatedVisitasRouteImport } from './routes/_authenticated/visitas'
 import { Route as InvitacionTokenRouteImport } from './routes/invitacion.$token'
 import { Route as AuthenticatedPlanesPlanIdRouteImport } from './routes/_authenticated/planes_.$planId'
+import { Route as AuthenticatedVisitasVisitaIdRouteImport } from './routes/_authenticated/visitas_.$visitaId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -89,6 +90,12 @@ const AuthenticatedPlanesPlanIdRoute =
     path: '/planes/$planId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedVisitasVisitaIdRoute =
+  AuthenticatedVisitasVisitaIdRouteImport.update({
+    id: '/visitas_/$visitaId',
+    path: '/visitas/$visitaId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/visitas': typeof AuthenticatedVisitasRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
+  '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +125,7 @@ export interface FileRoutesByTo {
   '/visitas': typeof AuthenticatedVisitasRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
+  '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +142,7 @@ export interface FileRoutesById {
   '/_authenticated/visitas': typeof AuthenticatedVisitasRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
   '/_authenticated/planes_/$planId': typeof AuthenticatedPlanesPlanIdRoute
+  '/_authenticated/visitas_/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/visitas'
     | '/invitacion/$token'
     | '/planes/$planId'
+    | '/visitas/$visitaId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/visitas'
     | '/invitacion/$token'
     | '/planes/$planId'
+    | '/visitas/$visitaId'
   id:
     | '__root__'
     | '/'
@@ -178,6 +190,7 @@ export interface FileRouteTypes {
     | '/_authenticated/visitas'
     | '/invitacion/$token'
     | '/_authenticated/planes_/$planId'
+    | '/_authenticated/visitas_/$visitaId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -281,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlanesPlanIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/visitas_/$visitaId': {
+      id: '/_authenticated/visitas_/$visitaId'
+      path: '/visitas/$visitaId'
+      fullPath: '/visitas/$visitaId'
+      preLoaderRoute: typeof AuthenticatedVisitasVisitaIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -293,6 +313,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPlanesNuevoRoute: typeof AuthenticatedPlanesNuevoRoute
   AuthenticatedVisitasRoute: typeof AuthenticatedVisitasRoute
   AuthenticatedPlanesPlanIdRoute: typeof AuthenticatedPlanesPlanIdRoute
+  AuthenticatedVisitasVisitaIdRoute: typeof AuthenticatedVisitasVisitaIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -304,6 +325,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPlanesNuevoRoute: AuthenticatedPlanesNuevoRoute,
   AuthenticatedVisitasRoute: AuthenticatedVisitasRoute,
   AuthenticatedPlanesPlanIdRoute: AuthenticatedPlanesPlanIdRoute,
+  AuthenticatedVisitasVisitaIdRoute: AuthenticatedVisitasVisitaIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

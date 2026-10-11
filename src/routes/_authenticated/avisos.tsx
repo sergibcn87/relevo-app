@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bell, BellOff, CheckCheck, CircleAlert, CircleCheck, Clock } from "lucide-react";
+import { Bell, BellOff, CheckCheck, CircleAlert, CircleCheck, Clock, TriangleAlert, UserRoundCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -75,7 +75,7 @@ function AvisosPage() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Avisos</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Finalizaciones y retrasos de tus visitas.
+            Invitaciones, incidencias y el estado de tus visitas.
           </p>
         </div>
         {unreadCount > 0 && (
