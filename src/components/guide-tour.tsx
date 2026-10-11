@@ -83,7 +83,7 @@ export function GuideTour({ role, onFinish }: GuideTourProps) {
   const [index, setIndex] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const step = steps[index];
+  const step = steps[index]!;
   const isLast = index === steps.length - 1;
 
   const locate = useCallback(() => {
