@@ -191,8 +191,8 @@ function validateProposal(
 
 /** Convierte fecha + hora locales de la zona de la casa a ISO UTC. */
 function zonedToUtcIso(date: string, time: string, timeZone: string): string {
-  const [y, mo, d] = date.split("-").map(Number);
-  const [h, mi] = time.split(":").map(Number);
+  const [y = 1970, mo = 1, d = 1] = date.split("-").map(Number);
+  const [h = 0, mi = 0] = time.split(":").map(Number);
   const guess = Date.UTC(y, mo - 1, d, h, mi);
   const fmt = new Intl.DateTimeFormat("en-CA", {
     timeZone,
