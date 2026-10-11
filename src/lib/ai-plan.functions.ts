@@ -393,7 +393,8 @@ export const generatePlanProposal = createServerFn({ method: "POST" })
     proposal.warnings = [...proposal.warnings, ...dropped];
 
     if (proposal.visits.length === 0) {
-      const { error: insertError } = await supabase.from("ai_proposals").insert({
+      const nothingNeeded = dropped.length === 0;
+      await supabase.from("ai_proposals").insert({
         house_id: houseId,
         created_by: userId,
         start_date: startDate,
@@ -401,14 +402,20 @@ export const generatePlanProposal = createServerFn({ method: "POST" })
         input_text: inputText.trim(),
         proposal: null,
         status: "borrador",
-        error: "La propuesta no contenía ninguna visita con tareas verificables.",
+        error: nothingNeeded
+          ? "La IA no propone ninguna visita para estas fechas."
+          : "La propuesta no contenía ninguna visita con tareas verificables.",
       });
-      void insertError;
+      // Si la IA concluye que no hace falta ninguna visita, su explicación
+      // (general_note) se muestra como aviso persistente junto al formulario.
       return {
         ok: false as const,
-        error:
-          "La IA no ha podido proponer visitas con tareas verificables. Revisa las preguntas y avisos, completa tus fichas e inténtalo de nuevo.",
-        warnings: proposal.warnings,
+        error: nothingNeeded
+          ? "La IA no propone ninguna visita para estas fechas."
+          : "La IA no ha podido proponer visitas con tareas verificables. Revisa las preguntas y avisos, completa tus fichas e inténtalo de nuevo.",
+        warnings: proposal.general_note
+          ? [proposal.general_note, ...proposal.warnings]
+          : proposal.warnings,
         questions: proposal.questions,
       };
     }
