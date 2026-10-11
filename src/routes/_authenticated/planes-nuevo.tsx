@@ -30,7 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/planes/nuevo")({
+export const Route = createFileRoute("/_authenticated/planes-nuevo")({
   validateSearch: (search: Record<string, unknown>): { borrador?: string | undefined } => ({
     borrador: typeof search["borrador"] === "string" ? (search["borrador"] as string) : undefined,
   }),
@@ -206,23 +206,23 @@ function NuevoPlanPage() {
       if (!silent) toast.success("Borrador guardado.");
       return planId;
     }
-    const { data, error } = await supabase
-      .from("plans")
-      .insert({
-        ...base,
-        house_id: house.id,
-        status: "borrador",
-        timezone: "Europe/Madrid",
-      })
-      .select("id")
-      .single();
-    if (error || !data) {
+    // El id se genera en el cliente: un INSERT con RETURNING choca con las
+    // políticas de lectura que consultan la propia tabla.
+    const newId = crypto.randomUUID();
+    const { error } = await supabase.from("plans").insert({
+      id: newId,
+      ...base,
+      house_id: house.id,
+      status: "borrador",
+      timezone: "Europe/Madrid",
+    });
+    if (error) {
       toast.error("No se ha podido guardar el borrador.");
       return null;
     }
-    setPlanId(data.id);
+    setPlanId(newId);
     if (!silent) toast.success("Borrador guardado. Puedes continuarlo cuando quieras.");
-    return data.id;
+    return newId;
   }
 
   async function goToStep(next: number) {
@@ -284,25 +284,23 @@ function NuevoPlanPage() {
     // 1. Plan pasa a abierto
     let id = planId;
     if (!id) {
-      const { data, error } = await supabase
-        .from("plans")
-        .insert({
-          house_id: house!.id,
-          title: title.trim(),
-          start_date: startDate,
-          end_date: endDate,
-          general_note: generalNote.trim() || null,
-          status: "abierto",
-          timezone: "Europe/Madrid",
-        })
-        .select("id")
-        .single();
-      if (error || !data) {
+      const newId = crypto.randomUUID();
+      const { error } = await supabase.from("plans").insert({
+        id: newId,
+        house_id: house!.id,
+        title: title.trim(),
+        start_date: startDate,
+        end_date: endDate,
+        general_note: generalNote.trim() || null,
+        status: "abierto",
+        timezone: "Europe/Madrid",
+      });
+      if (error) {
         setPublishing(false);
         toast.error("No se ha podido publicar el plan.");
         return;
       }
-      id = data.id;
+      id = newId;
     } else {
       const { error } = await supabase
         .from("plans")
@@ -322,12 +320,15 @@ function NuevoPlanPage() {
       }
     }
 
-    // 2. Visitas
-    const { data: visitsData, error: visitsError } = await supabase
-      .from("visits")
-      .insert(previewTimes.map((t) => ({ plan_id: id!, scheduled_at: t, status: "pendiente" })))
-      .select("id");
-    if (visitsError || !visitsData) {
+    // 2. Visitas (ids generados en el cliente por la misma razón que el plan)
+    const visitsData = previewTimes.map((t) => ({
+      id: crypto.randomUUID(),
+      plan_id: id!,
+      scheduled_at: t,
+      status: "pendiente",
+    }));
+    const { error: visitsError } = await supabase.from("visits").insert(visitsData);
+    if (visitsError) {
       setPublishing(false);
       toast.error("El plan se ha guardado, pero no se han podido crear las visitas.");
       return;
@@ -341,7 +342,7 @@ function NuevoPlanPage() {
         care_card_id: cardId,
         title: cardMap.get(cardId)?.name ?? "Tarea",
         instructions: cardMap.get(cardId)?.instructions ?? "",
-        source: "ficha",
+        source: "manual",
         sort_order: i,
       })),
     );

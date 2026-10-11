@@ -15,6 +15,20 @@
       "when": 1791706981531,
       "tag": "0001_plans_draft_and_care_photos_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791707801719,
+      "tag": "0002_guide_states_allow_omitida",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791708094931,
+      "tag": "0003_plans_status_add_abierto_completado",
+      "breakpoints": true
     }
   ]
 }
