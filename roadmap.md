@@ -17,11 +17,12 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
   - [x] Planes: asistente manual 3 pasos (fechas → fichas/visitas → revisión), borrador persistente en plans.draft
   - [x] Visitas individuales y repetidas con vista previa sin duplicados
   - [x] Guía/tour interactivo por rol (6/5 pasos, teclado, Escape, reduced-motion, estado por usuario/rol/versión)
-- [ ] 3. Invitaciones, visitas e incidencias
-  - [ ] Invitación con token seguro, 7 días, un solo uso, revocable, aceptación autenticada
-  - [ ] Cuidador: planes aceptados, visita del día, marcar tareas, omitir con motivo, foto/nota
-  - [ ] Bucket de fotos privado + subida con progreso y compresión
-  - [ ] Incidencias: abierta/resuelta, foto opcional
+- [x] 3. Invitaciones, visitas e incidencias
+  - [x] Invitación con token seguro, 7 días, un solo uso, revocable, aceptación autenticada (página pública /invitacion/$token; el plan pasa a activo y el propietario recibe aviso)
+  - [x] Cuidador: planes aceptados, próxima visita, marcar tareas, omitir con motivo obligatorio, foto/nota por tarea
+  - [x] Bucket de fotos privado + subida con compresión (cuidadores incluidos)
+  - [x] Incidencias: abierta/resuelta (solo el propietario resuelve), foto opcional, avisos automáticos
+  - [x] Cierre de visita con confirmación y aviso anti-duplicados (función close_visit)
 - [ ] 4. Cierre automático y avisos
   - [ ] Cierre automático al resolver la última tarea (con confirmación previa y anti-duplicados)
   - [ ] Aviso de finalización y de omisiones al propietario (centro de avisos + campana)

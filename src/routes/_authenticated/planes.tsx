@@ -222,6 +222,46 @@ function PlanesPage() {
               </div>
             </section>
           ) : null}
+
+          {asCaregiver.length > 0 && (
+            <section aria-label="Planes como cuidador">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                Como cuidador
+              </h2>
+              <div className="mt-3 flex flex-col gap-3">
+                {asCaregiver.map((plan) => {
+                  const meta = statusMeta(plan.status);
+                  return (
+                    <Link key={plan.id} to="/planes/$planId" params={{ planId: plan.id }}>
+                      <Card className="flex flex-col gap-2 p-5 transition-colors hover:border-primary/40 animate-fade-up-1">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <h3 className="text-base font-semibold text-card-foreground">
+                            {plan.title}
+                          </h3>
+                          <span
+                            className={cn(
+                              "rounded-full px-3 py-1 text-xs font-semibold",
+                              meta.className,
+                            )}
+                          >
+                            {meta.label}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {formatDateEs(plan.start_date)} → {formatDateEs(plan.end_date)}
+                          {plan.houses?.name ? ` · ${plan.houses.name}` : ""}
+                        </p>
+                        <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                          <Users className="h-4 w-4" aria-hidden /> Cuidas esta casa durante la
+                          ausencia
+                        </p>
+                      </Card>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          )}
         </div>
       )}
     </div>
