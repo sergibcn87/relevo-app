@@ -142,6 +142,11 @@ function CuentaPage() {
               Los avisos dentro de la aplicación siempre se muestran. Aquí eliges si también quieres
               recibirlos por correo.
             </p>
+            <p className="mt-3 rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-secondary-foreground">
+              El envío por correo aún no está configurado: se activará cuando Relevo tenga su
+              dominio de correo verificado. Mientras tanto, seguirás recibiendo todos los avisos
+              dentro de la aplicación.
+            </p>
             <div className="mt-4 flex flex-col gap-3">
               <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border bg-background px-4">
                 <input
