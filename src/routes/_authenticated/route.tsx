@@ -3,10 +3,21 @@ import {
   redirect,
   Outlet,
   Link,
+  Navigate,
   useNavigate,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bell, CalendarCheck, Home, Leaf, LogOut, Map, UserRound } from "lucide-react";
+import {
+  Bell,
+  CalendarCheck,
+  HandHeart,
+  Home,
+  Leaf,
+  LogOut,
+  Map,
+  UserRound,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/logo";
@@ -160,6 +171,22 @@ function AuthedShell() {
     await supabase.auth.signOut();
     navigate({ to: "/auth", replace: true });
   }
+
+  // Vista reducida de cuidador: sin casa propia y con al menos un plan como
+  // cuidador, solo ve Visitas, Avisos y Cuenta. Puede activar la vista de
+  // propietario creando su casa desde Cuenta.
+  const caregiverOnly =
+    !!tourContext && tourContext.ownedHouses === 0 && tourContext.caregiverPlans > 0;
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const ownerOnlyPath = ["/inicio", "/planes", "/fichas"].some((p) => pathname.startsWith(p));
+
+  const visibleDesktopNav = caregiverOnly
+    ? desktopNav.filter((i) => i.to === "/visitas" || i.to === "/cuenta")
+    : desktopNav;
+  const visibleMobileNav = caregiverOnly
+    ? mobileNav.filter((i) => i.to === "/visitas")
+    : mobileNav;
+  const homeTo = caregiverOnly ? "/visitas" : "/inicio";
 
   const displayName = profile?.display_name || "Tu cuenta";
   const initial = displayName.trim().charAt(0).toUpperCase() || "R";
