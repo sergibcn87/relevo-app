@@ -468,6 +468,7 @@ export type Database = {
         Row: {
           caregiver_id: string | null
           created_at: string
+          draft: Json | null
           end_date: string
           general_note: string | null
           house_id: string
@@ -480,6 +481,7 @@ export type Database = {
         Insert: {
           caregiver_id?: string | null
           created_at?: string
+          draft?: Json | null
           end_date: string
           general_note?: string | null
           house_id: string
@@ -492,6 +494,7 @@ export type Database = {
         Update: {
           caregiver_id?: string | null
           created_at?: string
+          draft?: Json | null
           end_date?: string
           general_note?: string | null
           house_id?: string
