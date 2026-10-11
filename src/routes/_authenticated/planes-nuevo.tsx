@@ -30,7 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/planes/nuevo")({
+export const Route = createFileRoute("/_authenticated/planes-nuevo")({
   validateSearch: (search: Record<string, unknown>): { borrador?: string | undefined } => ({
     borrador: typeof search["borrador"] === "string" ? (search["borrador"] as string) : undefined,
   }),

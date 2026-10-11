@@ -95,7 +95,7 @@ function PlanesPage() {
             Cada plan es una ausencia: fechas, visitas y cuidador.
           </p>
         </div>
-        <Link to="/planes/nuevo">
+        <Link to="/planes-nuevo">
           <Button className="shrink-0">
             <Plus className="h-4 w-4" aria-hidden /> Nuevo plan
           </Button>
@@ -129,7 +129,7 @@ function PlanesPage() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Link to="/planes/nuevo" search={{ borrador: plan.id }}>
+                      <Link to="/planes-nuevo" search={{ borrador: plan.id }}>
                         <Button variant="secondary" size="sm">
                           Continuar
                         </Button>
@@ -173,7 +173,7 @@ function PlanesPage() {
                 Crea tu primera ausencia paso a paso: fechas, fichas y visitas. Después invitarás a
                 tu cuidador con un enlace.
               </p>
-              <Link to="/planes/nuevo">
+              <Link to="/planes-nuevo">
                 <Button size="sm" className="mt-1">
                   <Plus className="h-4 w-4" aria-hidden /> Crear mi primer plan
                 </Button>
