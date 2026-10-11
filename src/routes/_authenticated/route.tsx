@@ -10,6 +10,7 @@ import { Bell, CalendarCheck, Home, Leaf, LogOut, Map, UserRound } from "lucide-
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/logo";
+import { GuideTour, GUIDE_VERSION, type GuideRole } from "@/components/guide-tour";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/_authenticated")({
 const desktopNav = [
   { to: "/inicio", label: "Resumen", icon: Home },
   { to: "/planes", label: "Planes", icon: Map },
+  { to: "/visitas", label: "Visitas", icon: CalendarCheck },
   { to: "/fichas", label: "Fichas", icon: Leaf },
   { to: "/cuenta", label: "Cuenta", icon: UserRound },
 ] as const;
@@ -68,6 +70,59 @@ function AuthedShell() {
     refetchOnWindowFocus: true,
   });
 
+  // Guía interactiva: rol según si tiene casa propia o solo planes como cuidador
+  const { data: tourContext } = useQuery({
+    queryKey: ["tour-context", user.id],
+    queryFn: async () => {
+      const [{ count: ownedHouses }, { count: caregiverPlans }] = await Promise.all([
+        supabase.from("houses").select("id", { count: "exact", head: true }),
+        supabase
+          .from("plans")
+          .select("id", { count: "exact", head: true })
+          .eq("caregiver_id", user.id),
+      ]);
+      return { ownedHouses: ownedHouses ?? 0, caregiverPlans: caregiverPlans ?? 0 };
+    },
+  });
+
+  const guideRole: GuideRole =
+    !tourContext || tourContext.ownedHouses > 0 || tourContext.caregiverPlans === 0
+      ? "propietario"
+      : "cuidador";
+
+  const { data: guideStatus } = useQuery({
+    queryKey: ["guide-state", user.id, guideRole],
+    enabled: !!tourContext,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("guide_states")
+        .select("status")
+        .eq("user_id", user.id)
+        .eq("role", guideRole)
+        .eq("version", GUIDE_VERSION)
+        .maybeSingle();
+      return data?.status ?? "no_iniciada";
+    },
+  });
+
+  const [tourClosed, setTourClosed] = useState(false);
+
+  async function finishTour(status: "completada" | "omitida") {
+    setTourClosed(true);
+    await supabase.from("guide_states").upsert(
+      {
+        user_id: user.id,
+        role: guideRole,
+        version: GUIDE_VERSION,
+        status,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id,role,version" },
+    );
+  }
+
+  const showTour = !tourClosed && guideStatus === "no_iniciada";
+
   useEffect(() => {
     function onClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) setMenuOpen(false);
@@ -89,6 +144,7 @@ function AuthedShell() {
   const bell = (
     <Link
       to="/avisos"
+      data-tour="nav-avisos"
       aria-label={`Avisos${unread > 0 ? `, ${unread} sin leer` : ""}`}
       className="relative flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-colors hover:bg-secondary/60"
     >
@@ -105,6 +161,7 @@ function AuthedShell() {
     <div className="relative" ref={menuRef}>
       <button
         type="button"
+        data-tour="menu-cuenta"
         onClick={() => setMenuOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={menuOpen}
@@ -164,6 +221,7 @@ function AuthedShell() {
               <Link
                 key={item.to}
                 to={item.to}
+                data-tour={`nav-${item.to.slice(1)}`}
                 activeOptions={{ exact: true }}
                 className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 activeProps={{ className: "bg-sidebar-accent text-sidebar-accent-foreground font-semibold" }}
@@ -194,6 +252,7 @@ function AuthedShell() {
           <Link
             key={item.to}
             to={item.to}
+            data-tour={`mnav-${item.to.slice(1)}`}
             activeOptions={{ exact: true }}
             aria-label={item.label}
             className={cn(
@@ -203,11 +262,13 @@ function AuthedShell() {
               className: "bg-primary-foreground/15 text-primary-foreground",
             }}
           >
-            <item.icon className="h-5 w-5" aria-hidden />
+          <item.icon className="h-5 w-5" aria-hidden />
             {item.label}
           </Link>
         ))}
       </nav>
+
+      {showTour && <GuideTour role={guideRole} onFinish={finishTour} />}
     </div>
   );
 }

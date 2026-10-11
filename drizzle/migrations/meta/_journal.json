@@ -8,6 +8,13 @@
       "when": 1791706421996,
       "tag": "0000_relevo_core_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791706981531,
+      "tag": "0001_plans_draft_and_care_photos_policies",
+      "breakpoints": true
     }
   ]
 }

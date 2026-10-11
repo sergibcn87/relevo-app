@@ -89,7 +89,10 @@ function CuentaPage() {
       .from("guide_states")
       .upsert(rows, { onConflict: "user_id,role,version" });
     if (error) toast.error("No se ha podido restablecer la guía.");
-    else toast.success("La guía se mostrará la próxima vez que entres en el panel.");
+    else {
+      queryClient.invalidateQueries({ queryKey: ["guide-state"] });
+      toast.success("La guía se mostrará en un momento.");
+    }
   }
 
   async function handleSignOut() {

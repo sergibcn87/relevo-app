@@ -19,6 +19,7 @@ import { Route as AuthenticatedFichasRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedPlanesRouteImport } from './routes/_authenticated/planes'
 import { Route as AuthenticatedVisitasRouteImport } from './routes/_authenticated/visitas'
+import { Route as AuthenticatedPlanesNuevoRouteImport } from './routes/_authenticated/planes.nuevo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -69,6 +70,12 @@ const AuthenticatedVisitasRoute = AuthenticatedVisitasRouteImport.update({
   path: '/visitas',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPlanesNuevoRoute =
+  AuthenticatedPlanesNuevoRouteImport.update({
+    id: '/nuevo',
+    path: '/nuevo',
+    getParentRoute: () => AuthenticatedPlanesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -78,8 +85,9 @@ export interface FileRoutesByFullPath {
   '/cuenta': typeof AuthenticatedCuentaRoute
   '/fichas': typeof AuthenticatedFichasRoute
   '/inicio': typeof AuthenticatedInicioRoute
-  '/planes': typeof AuthenticatedPlanesRoute
+  '/planes': typeof AuthenticatedPlanesRouteWithChildren
   '/visitas': typeof AuthenticatedVisitasRoute
+  '/planes/nuevo': typeof AuthenticatedPlanesNuevoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,8 +97,9 @@ export interface FileRoutesByTo {
   '/cuenta': typeof AuthenticatedCuentaRoute
   '/fichas': typeof AuthenticatedFichasRoute
   '/inicio': typeof AuthenticatedInicioRoute
-  '/planes': typeof AuthenticatedPlanesRoute
+  '/planes': typeof AuthenticatedPlanesRouteWithChildren
   '/visitas': typeof AuthenticatedVisitasRoute
+  '/planes/nuevo': typeof AuthenticatedPlanesNuevoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -102,8 +111,9 @@ export interface FileRoutesById {
   '/_authenticated/cuenta': typeof AuthenticatedCuentaRoute
   '/_authenticated/fichas': typeof AuthenticatedFichasRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
-  '/_authenticated/planes': typeof AuthenticatedPlanesRoute
+  '/_authenticated/planes': typeof AuthenticatedPlanesRouteWithChildren
   '/_authenticated/visitas': typeof AuthenticatedVisitasRoute
+  '/_authenticated/planes/nuevo': typeof AuthenticatedPlanesNuevoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/planes'
     | '/visitas'
+    | '/planes/nuevo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/planes'
     | '/visitas'
+    | '/planes/nuevo'
   id:
     | '__root__'
     | '/'
@@ -140,6 +152,7 @@ export interface FileRouteTypes {
     | '/_authenticated/inicio'
     | '/_authenticated/planes'
     | '/_authenticated/visitas'
+    | '/_authenticated/planes/nuevo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -221,15 +234,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVisitasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/planes/nuevo': {
+      id: '/_authenticated/planes/nuevo'
+      path: '/nuevo'
+      fullPath: '/planes/nuevo'
+      preLoaderRoute: typeof AuthenticatedPlanesNuevoRouteImport
+      parentRoute: typeof AuthenticatedPlanesRoute
+    }
   }
 }
+
+interface AuthenticatedPlanesRouteChildren {
+  AuthenticatedPlanesNuevoRoute: typeof AuthenticatedPlanesNuevoRoute
+}
+
+const AuthenticatedPlanesRouteChildren: AuthenticatedPlanesRouteChildren = {
+  AuthenticatedPlanesNuevoRoute: AuthenticatedPlanesNuevoRoute,
+}
+
+const AuthenticatedPlanesRouteWithChildren =
+  AuthenticatedPlanesRoute._addFileChildren(AuthenticatedPlanesRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
   AuthenticatedCuentaRoute: typeof AuthenticatedCuentaRoute
   AuthenticatedFichasRoute: typeof AuthenticatedFichasRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
-  AuthenticatedPlanesRoute: typeof AuthenticatedPlanesRoute
+  AuthenticatedPlanesRoute: typeof AuthenticatedPlanesRouteWithChildren
   AuthenticatedVisitasRoute: typeof AuthenticatedVisitasRoute
 }
 
@@ -238,7 +269,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCuentaRoute: AuthenticatedCuentaRoute,
   AuthenticatedFichasRoute: AuthenticatedFichasRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
-  AuthenticatedPlanesRoute: AuthenticatedPlanesRoute,
+  AuthenticatedPlanesRoute: AuthenticatedPlanesRouteWithChildren,
   AuthenticatedVisitasRoute: AuthenticatedVisitasRoute,
 }
 
