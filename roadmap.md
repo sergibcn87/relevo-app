@@ -24,8 +24,8 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
   - [x] Incidencias: abierta/resuelta (solo el propietario resuelve), foto opcional, avisos automáticos
   - [x] Cierre de visita con confirmación y aviso anti-duplicados (función close_visit)
 - [ ] 4. Cierre automático y avisos
-  - [ ] Cierre automático al resolver la última tarea (con confirmación previa y anti-duplicados)
-  - [ ] Aviso de finalización y de omisiones al propietario (centro de avisos + campana)
+  - [x] Cierre automático al resolver la última tarea (con confirmación previa y anti-duplicados) — hecho en bloque 3
+  - [x] Aviso de finalización y de omisiones al propietario (centro de avisos + campana) — hecho en bloque 3 (correo pendiente en bloque 4)
   - [ ] Aviso de retraso: margen 90 min (30+60), una sola vez por visita, tarea programada cada 5 min
   - [ ] Cola de correo con reintentos; preferencias de correo en Cuenta; estado claro si el correo no está configurado
 - [ ] 5. IA (crear plan con IA, revisión en dos columnas, trazabilidad de fragmentos, validación en servidor)
