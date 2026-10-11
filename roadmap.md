@@ -11,12 +11,12 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
   - [x] Registro, login, mostrar/ocultar contraseña, recuperación, cierre de sesión
   - [x] Rutas privadas protegidas (`_authenticated`) con conservación del destino (invitaciones)
   - [x] Landing pública en `/`, panel Resumen con creación de casa, Cuenta (perfil + preferencias de correo + guía), centro de Avisos, navegación móvil en cápsula y barra lateral de escritorio
-- [ ] 2. Casa, fichas, planes y guía
-  - [ ] Casa: nombre, estancias editables, ciudad opcional
-  - [ ] Fichas: planta/mascota/casa, plantillas, foto, archivo en lugar de borrado
-  - [ ] Planes: asistente manual 3 pasos (fechas → fichas/visitas → cuidador/revisión), borrador persistente
-  - [ ] Visitas individuales y repetidas con vista previa sin duplicados
-  - [ ] Guía/tour interactivo por rol (máx. 6/5 pasos, teclado, Escape, reduced-motion, estado por usuario/rol/versión)
+- [x] 2. Casa, fichas, planes y guía
+  - [x] Casa: nombre, estancias editables, ciudad opcional (diálogo desde Resumen)
+  - [x] Fichas: planta/mascota/casa, plantillas, foto (bucket privado care-photos + URLs firmadas), archivo en lugar de borrado
+  - [x] Planes: asistente manual 3 pasos (fechas → fichas/visitas → revisión), borrador persistente en plans.draft
+  - [x] Visitas individuales y repetidas con vista previa sin duplicados
+  - [x] Guía/tour interactivo por rol (6/5 pasos, teclado, Escape, reduced-motion, estado por usuario/rol/versión)
 - [ ] 3. Invitaciones, visitas e incidencias
   - [ ] Invitación con token seguro, 7 días, un solo uso, revocable, aceptación autenticada
   - [ ] Cuidador: planes aceptados, visita del día, marcar tareas, omitir con motivo, foto/nota
