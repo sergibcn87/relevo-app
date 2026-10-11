@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// Tarea programada (cada hora): avisa al propietario cuando una visita
-// sigue sin completarse 90 minutos después de empezar. El margen cuenta
-// desde visits.started_at (primera tarea realizada), no desde la hora
-// prevista. Una sola vez por visita.
+// Avisa al propietario cuando una visita sigue sin completarse 90 minutos
+// después de empezar. El margen cuenta desde visits.started_at (primera
+// tarea realizada), no desde la hora prevista. Una sola vez por visita.
+// Sin tarea programada: la app llama a esta ruta al abrirla (limitado a
+// una comprobación cada 15 minutos por dispositivo).
 // El bearer (clave pública del proyecto) solo filtra tráfico espurio:
 // la operación es idempotente y no expone datos.
 

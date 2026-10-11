@@ -41,7 +41,7 @@ const STEPS: Record<GuideRole, GuideStep[]> = {
     },
     {
       title: "Tu cuenta",
-      body: "Desde tu avatar abres tu cuenta: nombre visible, avisos por correo y la opción de repetir esta guía.",
+      body: "Desde tu avatar abres tu cuenta: nombre visible y la opción de repetir esta guía.",
       targets: ['[data-tour="menu-cuenta"]'],
     },
   ],
@@ -67,7 +67,7 @@ const STEPS: Record<GuideRole, GuideStep[]> = {
     },
     {
       title: "Tu cuenta",
-      body: "Desde tu avatar abres tu cuenta: nombre visible, avisos por correo y la opción de repetir esta guía.",
+      body: "Desde tu avatar abres tu cuenta: nombre visible y la opción de repetir esta guía.",
       targets: ['[data-tour="menu-cuenta"]'],
     },
   ],
