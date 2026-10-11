@@ -28,7 +28,10 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
   - [x] Aviso de finalización y de omisiones al propietario (centro de avisos + campana) — hecho en bloque 3
   - [x] Aviso de retraso: margen 90 min desde el primer check del cuidador (visits.started_at, trigger tasks_mark_visit_started), una sola vez por visita; la comprobación se hace al abrir la app (ruta /api/public/hooks/visitas-retrasadas, sin tarea programada)
   - [x] Avisos por correo: retirados del producto por decisión del usuario (2026-10-11); columnas de preferencias y cola de correo marcadas como deprecated
-- [ ] 5. IA (crear plan con IA, revisión en dos columnas, trazabilidad de fragmentos, validación en servidor)
+- [x] 5. IA (crear plan con IA, revisión en dos columnas, trazabilidad de fragmentos, validación en servidor)
+  - [x] Función de servidor generatePlanProposal (gateway /v1/responses, json_schema estricto, stream SSE consumido en servidor) + confirmPlanProposal / discardPlanProposal
+  - [x] Validación en servidor: tareas sin ficha conocida, fuera de fechas o sin fragmento literal verificable se descartan con aviso; propuestas en ai_proposals (borrador → guardada/descartada)
+  - [x] Pantalla /planes-ia: descripción en lenguaje natural, avisos y preguntas de la IA, revisión en dos columnas (propuesta | fragmentos de origen resaltados), creación solo tras confirmar
 - [ ] 6. Meteorología (Open-Meteo, reglas por umbral, sugerencias aceptables/descartables, caché 1 h)
 - [ ] 7. Animaciones, pruebas (320/390/768/1440 px) y correcciones
 - [ ] 8. Escenario de demostración (Casa Olmo, Alex, Nora, Monstera, Milo, toldo, paquetes) y evidencias (README, decisiones, guion de vídeo)
