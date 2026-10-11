@@ -22,6 +22,13 @@
       "when": 1791707801719,
       "tag": "0002_guide_states_allow_omitida",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791708094931,
+      "tag": "0003_plans_status_add_abierto_completado",
+      "breakpoints": true
     }
   ]
 }
