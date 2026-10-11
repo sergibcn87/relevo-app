@@ -667,6 +667,7 @@ export type Database = {
           id: string
           plan_id: string
           scheduled_at: string
+          started_at: string | null
           status: string
         }
         Insert: {
@@ -678,6 +679,7 @@ export type Database = {
           id?: string
           plan_id: string
           scheduled_at: string
+          started_at?: string | null
           status?: string
         }
         Update: {
@@ -689,6 +691,7 @@ export type Database = {
           id?: string
           plan_id?: string
           scheduled_at?: string
+          started_at?: string | null
           status?: string
         }
         Relationships: [
