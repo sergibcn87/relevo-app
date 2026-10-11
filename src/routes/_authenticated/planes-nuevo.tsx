@@ -342,7 +342,7 @@ function NuevoPlanPage() {
         care_card_id: cardId,
         title: cardMap.get(cardId)?.name ?? "Tarea",
         instructions: cardMap.get(cardId)?.instructions ?? "",
-        source: "ficha",
+        source: "manual",
         sort_order: i,
       })),
     );
