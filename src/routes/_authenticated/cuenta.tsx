@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
-import { Loader2, LogOut } from "lucide-react";
+import { HandHeart, Home, Loader2, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,49 @@ function CuentaPage() {
 
   const [displayName, setDisplayName] = useState("");
   const [saving, setSaving] = useState(false);
+  const [ownerFormOpen, setOwnerFormOpen] = useState(false);
+  const [houseName, setHouseName] = useState("");
+  const [houseCity, setHouseCity] = useState("");
+  const [creatingHouse, setCreatingHouse] = useState(false);
+
+  const { data: accountContext } = useQuery({
+    queryKey: ["account-context", user.id],
+    queryFn: async () => {
+      const [{ count: ownedHouses }, { count: caregiverPlans }] = await Promise.all([
+        supabase.from("houses").select("id", { count: "exact", head: true }),
+        supabase
+          .from("plans")
+          .select("id", { count: "exact", head: true })
+          .eq("caregiver_id", user.id),
+      ]);
+      return { ownedHouses: ownedHouses ?? 0, caregiverPlans: caregiverPlans ?? 0 };
+    },
+  });
+  const caregiverOnly =
+    !!accountContext && accountContext.ownedHouses === 0 && accountContext.caregiverPlans > 0;
+
+  async function handleActivateOwner(event: FormEvent) {
+    event.preventDefault();
+    if (!houseName.trim()) return;
+    setCreatingHouse(true);
+    const { error } = await supabase.from("houses").insert({
+      owner_id: user.id,
+      name: houseName.trim(),
+      city: houseCity.trim() || null,
+    });
+    setCreatingHouse(false);
+    if (error) {
+      toast.error("No se ha podido crear la casa. Inténtalo de nuevo.");
+      return;
+    }
+    toast.success("Vista de propietario activada. ¡Bienvenido a tu casa!");
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["tour-context", user.id] }),
+      queryClient.invalidateQueries({ queryKey: ["houses", user.id] }),
+      queryClient.invalidateQueries({ queryKey: ["account-context", user.id] }),
+    ]);
+    navigate({ to: "/inicio" });
+  }
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile-full", user.id],
@@ -107,7 +150,75 @@ function CuentaPage() {
           <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Cargando tu perfil…
         </p>
       ) : (
-        <form onSubmit={handleSave} className="mt-6 flex flex-col gap-6">
+        <div className="mt-6 flex flex-col gap-6">
+          {caregiverOnly && (
+            <Card className="p-6 animate-fade-up-1">
+              <div className="flex items-start gap-3">
+                <HandHeart className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
+                <div>
+                  <h2 className="text-base font-semibold text-card-foreground">
+                    Vista de cuidador
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Estás usando Relevo como cuidador: ves las visitas y tareas de los planes a
+                    los que te han invitado. Si también quieres organizar el cuidado de tu propia
+                    casa, crea tu casa y se activará la vista de propietario.
+                  </p>
+                </div>
+              </div>
+              {!ownerFormOpen ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="mt-4"
+                  onClick={() => setOwnerFormOpen(true)}
+                >
+                  <Home className="h-4 w-4" aria-hidden /> Crear mi casa
+                </Button>
+              ) : (
+                <form onSubmit={handleActivateOwner} className="mt-4 flex flex-col gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="owner-house-name">Nombre de la casa</Label>
+                    <Input
+                      id="owner-house-name"
+                      value={houseName}
+                      onChange={(e) => setHouseName(e.target.value)}
+                      placeholder="Por ejemplo: Apartamento de la playa"
+                      maxLength={80}
+                      required
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="owner-house-city">Ciudad (opcional)</Label>
+                    <Input
+                      id="owner-house-city"
+                      value={houseCity}
+                      onChange={(e) => setHouseCity(e.target.value)}
+                      placeholder="Valencia"
+                      maxLength={80}
+                    />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button type="submit" size="sm" disabled={creatingHouse}>
+                      {creatingHouse && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+                      Activar vista de propietario
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setOwnerFormOpen(false)}
+                    >
+                      Ahora no
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </Card>
+          )}
+
+          <form onSubmit={handleSave} className="flex flex-col gap-6">
           <Card className="p-6 animate-fade-up-1">
             <h2 className="text-base font-semibold text-card-foreground">Perfil</h2>
             <div className="mt-4 flex flex-col gap-4">
@@ -150,7 +261,8 @@ function CuentaPage() {
               <LogOut className="h-4 w-4" aria-hidden /> Cerrar sesión
             </Button>
           </div>
-        </form>
+          </form>
+        </div>
       )}
     </div>
   );
