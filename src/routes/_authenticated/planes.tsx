@@ -71,8 +71,10 @@ function PlanesPage() {
     },
   });
 
-  const drafts = plans.filter((p) => p.status === "borrador");
-  const published = plans.filter((p) => p.status !== "borrador");
+  const asCaregiver = plans.filter((p) => p.caregiver_id === user.id);
+  const owned = plans.filter((p) => p.caregiver_id !== user.id);
+  const drafts = owned.filter((p) => p.status === "borrador");
+  const published = owned.filter((p) => p.status !== "borrador");
 
   async function discardDraft(planId: string) {
     setDeleting(true);
@@ -188,31 +190,33 @@ function PlanesPage() {
                 {published.map((plan) => {
                   const meta = statusMeta(plan.status);
                   return (
-                    <Card key={plan.id} className="flex flex-col gap-2 p-5 animate-fade-up-1">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <h3 className="text-base font-semibold text-card-foreground">
-                          {plan.title}
-                        </h3>
-                        <span
-                          className={cn(
-                            "rounded-full px-3 py-1 text-xs font-semibold",
-                            meta.className,
-                          )}
-                        >
-                          {meta.label}
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {formatDateEs(plan.start_date)} → {formatDateEs(plan.end_date)}
-                        {plan.houses?.name ? ` · ${plan.houses.name}` : ""}
-                      </p>
-                      <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                        <Users className="h-4 w-4" aria-hidden />
-                        {plan.caregiver_id
-                          ? "Cuidador asignado"
-                          : "Sin cuidador: la invitación estará disponible muy pronto."}
-                      </p>
-                    </Card>
+                    <Link key={plan.id} to="/planes/$planId" params={{ planId: plan.id }}>
+                      <Card className="flex flex-col gap-2 p-5 transition-colors hover:border-primary/40 animate-fade-up-1">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <h3 className="text-base font-semibold text-card-foreground">
+                            {plan.title}
+                          </h3>
+                          <span
+                            className={cn(
+                              "rounded-full px-3 py-1 text-xs font-semibold",
+                              meta.className,
+                            )}
+                          >
+                            {meta.label}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {formatDateEs(plan.start_date)} → {formatDateEs(plan.end_date)}
+                          {plan.houses?.name ? ` · ${plan.houses.name}` : ""}
+                        </p>
+                        <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                          <Users className="h-4 w-4" aria-hidden />
+                          {plan.caregiver_id
+                            ? "Cuidador asignado"
+                            : "Sin cuidador: abre el plan para crear la invitación."}
+                        </p>
+                      </Card>
+                    </Link>
                   );
                 })}
               </div>

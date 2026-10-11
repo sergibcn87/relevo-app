@@ -26,6 +26,9 @@ const typeConfig = {
     label: "Completada con omisiones",
   },
   visita_retrasada: { icon: Clock, className: "text-destructive", label: "Visita sin completar" },
+  invitacion_aceptada: { icon: UserRoundCheck, className: "text-primary", label: "Invitación aceptada" },
+  incidencia_abierta: { icon: TriangleAlert, className: "text-destructive", label: "Incidencia abierta" },
+  incidencia_resuelta: { icon: CircleCheck, className: "text-primary", label: "Incidencia resuelta" },
 } as const;
 
 function AvisosPage() {
