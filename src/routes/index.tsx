@@ -60,11 +60,14 @@ function LandingPage() {
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
         <Logo />
         <div className="flex items-center gap-2">
-          <Button variant="ghost" asChild={false}>
-            <Link to="/auth">Entrar</Link>
-          </Button>
-          <Link to="/auth" search={{ redirect: undefined }}>
-            <Button size="sm" className="hidden sm:inline-flex">Crear cuenta</Button>
+          <Link
+            to="/auth"
+            className="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-foreground transition-colors hover:bg-secondary/60"
+          >
+            Entrar
+          </Link>
+          <Link to="/auth" className="hidden sm:inline-flex">
+            <Button size="sm">Crear cuenta</Button>
           </Link>
         </div>
       </header>
@@ -108,7 +111,9 @@ function LandingPage() {
           {features.map((feature, index) => (
             <article
               key={feature.title}
-              className={`rounded-2xl border border-border bg-card p-5 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 animate-fade-up-${Math.min(index, 3)}`}
+              className={`rounded-2xl border border-border bg-card p-5 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 ${
+                ["animate-fade-up", "animate-fade-up-1", "animate-fade-up-2", "animate-fade-up-3", "animate-fade-up-3", "animate-fade-up-3"][index]
+              }`}
             >
               <feature.icon className="h-6 w-6 text-primary" aria-hidden />
               <h2 className="mt-3 text-base font-semibold text-card-foreground">{feature.title}</h2>
