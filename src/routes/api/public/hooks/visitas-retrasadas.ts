@@ -35,7 +35,7 @@ export const Route = createFileRoute("/api/public/hooks/visitas-retrasadas")({
           .select(
             "id, scheduled_at, plan_id, plans!inner(status, title, timezone, houses!inner(owner_id, name))",
           )
-          .eq("status", "programada")
+          .in("status", ["pendiente", "en_curso"])
           .is("delay_notified_at", null)
           .lt("scheduled_at", cutoff)
           .eq("plans.status", "activo");
