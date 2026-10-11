@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { FilePenLine, Loader2, Map, Plus, Trash2, Users } from "lucide-react";
+import { FilePenLine, Loader2, Map, Plus, Sparkles, Trash2, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateEs } from "@/lib/visits";
@@ -97,11 +97,18 @@ function PlanesPage() {
             Cada plan es una ausencia: fechas, visitas y cuidador.
           </p>
         </div>
-        <Link to="/planes-nuevo">
-          <Button className="shrink-0">
-            <Plus className="h-4 w-4" aria-hidden /> Nuevo plan
-          </Button>
-        </Link>
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <Link to="/planes-ia">
+            <Button variant="outline">
+              <Sparkles className="h-4 w-4" aria-hidden /> Crear con IA
+            </Button>
+          </Link>
+          <Link to="/planes-nuevo">
+            <Button>
+              <Plus className="h-4 w-4" aria-hidden /> Nuevo plan
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {isLoading ? (
