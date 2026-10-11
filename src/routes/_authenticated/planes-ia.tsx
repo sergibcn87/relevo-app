@@ -225,6 +225,29 @@ function PlanesIaPage() {
 
       {phase === "form" && (
         <form onSubmit={handleGenerate} className="mt-6 flex flex-col gap-5">
+          {feedback && (
+            <div className="flex flex-col gap-3" role="status">
+              {feedback.warnings.map((w, i) => (
+                <p
+                  key={`fw-${i}`}
+                  className="flex items-start gap-2 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning animate-fade-up"
+                >
+                  <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden /> {w}
+                </p>
+              ))}
+              {feedback.questions.map((q, i) => (
+                <p
+                  key={`fq-${i}`}
+                  className="flex items-start gap-2 rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-secondary-foreground animate-fade-up"
+                >
+                  <CircleHelp className="mt-0.5 h-4 w-4 shrink-0" aria-hidden /> {q}
+                </p>
+              ))}
+              <p className="text-xs text-muted-foreground">
+                Responde a estas preguntas en la descripción y vuelve a generar la propuesta.
+              </p>
+            </div>
+          )}
           <Card className="flex flex-col gap-4 p-6 animate-fade-up">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="ai-title">
