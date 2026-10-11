@@ -295,7 +295,10 @@ function VisitaDetailPage() {
         <ul className="mt-3 flex flex-col gap-3">
           {tasks.map((task) => {
             const taskNotes = notes.filter((n) => n.task_id === task.id);
-            const meta = TASK_STATUS[task.status] ?? TASK_STATUS.pendiente;
+            const meta = TASK_STATUS[task.status] ?? {
+              label: "Pendiente",
+              className: "bg-secondary text-secondary-foreground",
+            };
             const isLast = task.status === "pendiente" && pendingCount === 1;
             return (
               <li key={task.id}>
@@ -472,7 +475,7 @@ function VisitaDetailPage() {
           </div>
           <Button
             className="self-start"
-            disabled={!skipReason.trim() || (skipTask && busyTaskId === skipTask.id)}
+            disabled={!skipReason.trim() || (!!skipTask && busyTaskId === skipTask.id)}
             onClick={() => skipTask && submitSkip(pendingCount === 1)}
           >
             {skipTask && busyTaskId === skipTask.id && (
