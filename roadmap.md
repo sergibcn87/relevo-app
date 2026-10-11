@@ -5,12 +5,12 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
 ## Bloques (según PRD §21)
 
 - [x] 0. Lovable Cloud activado + acceso con correo habilitado
-- [ ] 1. Autenticación, datos y base visual
+- [x] 1. Autenticación, datos y base visual
   - [x] Esquema de base de datos (perfiles, casas, fichas, planes, invitaciones, visitas, tareas, incidencias, actividad, reglas y sugerencias meteorológicas, propuestas IA, avisos, cola de correo, estado de guía)
-  - [ ] Sistema de diseño (paleta marfil/verde bosque/terracota/ámbar, tipografía, radios)
-  - [ ] Registro, login, mostrar/ocultar contraseña, recuperación, cierre de sesión
-  - [ ] Rutas privadas protegidas (`_authenticated`)
-  - [ ] Landing pública en `/`
+  - [x] Sistema de diseño (paleta marfil/verde bosque/terracota/ámbar, tipografía Sora, radios)
+  - [x] Registro, login, mostrar/ocultar contraseña, recuperación, cierre de sesión
+  - [x] Rutas privadas protegidas (`_authenticated`) con conservación del destino (invitaciones)
+  - [x] Landing pública en `/`, panel Resumen con creación de casa, Cuenta (perfil + preferencias de correo + guía), centro de Avisos, navegación móvil en cápsula y barra lateral de escritorio
 - [ ] 2. Casa, fichas, planes y guía
   - [ ] Casa: nombre, estancias editables, ciudad opcional
   - [ ] Fichas: planta/mascota/casa, plantillas, foto, archivo en lugar de borrado
