@@ -133,7 +133,7 @@ function AuthedShell() {
     localStorage.setItem(KEY, String(Date.now()));
     fetch("/api/public/hooks/visitas-retrasadas", {
       method: "POST",
-      headers: { authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+      headers: { authorization: `Bearer ${import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"]}` },
     }).catch(() => {});
   }, []);
 
