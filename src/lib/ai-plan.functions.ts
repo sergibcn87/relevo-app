@@ -497,7 +497,8 @@ export const confirmPlanProposal = createServerFn({ method: "POST" })
       return { ok: false as const, error: "El plan se creó, pero no sus visitas. Edítalo desde Planes." };
     }
 
-    const cardMap = new Map(cardRows.map((c) => [c.id, c]));
+    // La tarea conserva copia de las instrucciones; el fragmento de origen
+    // queda guardado en ai_proposals para trazabilidad.
     const taskRows = proposal.visits.flatMap((v, vi) =>
       v.tasks.map((t, ti) => ({
         visit_id: visitRows[vi]!.id,
@@ -506,9 +507,6 @@ export const confirmPlanProposal = createServerFn({ method: "POST" })
         instructions: t.instructions,
         source: "ia",
         sort_order: ti,
-        // La tarea conserva copia de las instrucciones de la ficha.
-        // (El fragmento de origen queda en ai_proposals para trazabilidad.)
-        ...(cardMap.has(t.card_id) ? {} : {}),
       })),
     );
     const { error: tasksError } = await supabase.from("tasks").insert(taskRows);
