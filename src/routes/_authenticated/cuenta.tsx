@@ -261,7 +261,8 @@ function CuentaPage() {
               <LogOut className="h-4 w-4" aria-hidden /> Cerrar sesión
             </Button>
           </div>
-        </form>
+          </form>
+        </div>
       )}
     </div>
   );
