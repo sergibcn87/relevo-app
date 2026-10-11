@@ -43,6 +43,13 @@
       "when": 1791714875726,
       "tag": "0005_visit_start_marker",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791715305613,
+      "tag": "0006_deprecate_email_notifications",
+      "breakpoints": true
     }
   ]
 }

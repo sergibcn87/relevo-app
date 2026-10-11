@@ -11,4 +11,5 @@
 
 # Project rules
 
-- Visit delay alerts are computed from `visits.started_at` (set by trigger `tasks_mark_visit_started` on the first task marked `realizada`), never from `scheduled_at`: the hourly cron route `/api/public/hooks/visitas-retrasadas` only considers started visits. Why: the user wants the 90-minute margin to count from actual work start and to keep DB polling infrequent.
+- Visit delay alerts are computed from `visits.started_at` (set by trigger `tasks_mark_visit_started` on the first task marked `realizada`), never from `scheduled_at`. There is no cron job: the authenticated shell POSTs `/api/public/hooks/visitas-retrasadas` on app load, throttled to one check per 15 minutes per device. Why: the user wants the 90-minute margin to count from actual work start and no scheduled polling at all.
+- Email notifications were removed from the product (2026-10-11): `profiles.email_*` columns and the `email_queue` table are deprecated and unused. Do not reintroduce email sending unless the user explicitly asks.

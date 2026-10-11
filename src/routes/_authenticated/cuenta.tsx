@@ -13,9 +13,9 @@ export const Route = createFileRoute("/_authenticated/cuenta")({
   head: () => ({
     meta: [
       { title: "Cuenta — Relevo" },
-      { name: "description", content: "Tu perfil y preferencias de avisos en Relevo." },
+      { name: "description", content: "Tu perfil en Relevo." },
       { property: "og:title", content: "Cuenta — Relevo" },
-      { property: "og:description", content: "Tu perfil y preferencias de avisos en Relevo." },
+      { property: "og:description", content: "Tu perfil en Relevo." },
     ],
   }),
   component: CuentaPage,
@@ -27,8 +27,6 @@ function CuentaPage() {
   const queryClient = useQueryClient();
 
   const [displayName, setDisplayName] = useState("");
-  const [emailCompletion, setEmailCompletion] = useState(true);
-  const [emailDelay, setEmailDelay] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const { data: profile, isLoading } = useQuery({
@@ -36,7 +34,7 @@ function CuentaPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("display_name, email_completion_notifications, email_delay_notifications")
+        .select("display_name")
         .eq("id", user.id)
         .maybeSingle();
       return data;
@@ -44,11 +42,7 @@ function CuentaPage() {
   });
 
   useEffect(() => {
-    if (profile) {
-      setDisplayName(profile.display_name);
-      setEmailCompletion(profile.email_completion_notifications);
-      setEmailDelay(profile.email_delay_notifications);
-    }
+    if (profile) setDisplayName(profile.display_name);
   }, [profile]);
 
   async function handleSave(event: FormEvent) {
@@ -62,8 +56,6 @@ function CuentaPage() {
       .from("profiles")
       .update({
         display_name: displayName.trim(),
-        email_completion_notifications: emailCompletion,
-        email_delay_notifications: emailDelay,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
@@ -105,7 +97,7 @@ function CuentaPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="text-2xl font-bold text-foreground">Cuenta</h1>
-      <p className="mt-1 text-sm text-muted-foreground">Tu perfil y tus preferencias de avisos.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Tu perfil en Relevo.</p>
 
       {isLoading ? (
         <p className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
@@ -137,43 +129,6 @@ function CuentaPage() {
           </Card>
 
           <Card className="p-6 animate-fade-up-2">
-            <h2 className="text-base font-semibold text-card-foreground">Avisos por correo</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Los avisos dentro de la aplicación siempre se muestran. Aquí eliges si también quieres
-              recibirlos por correo.
-            </p>
-            <p className="mt-3 rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-secondary-foreground">
-              El envío por correo aún no está configurado: se activará cuando Relevo tenga su
-              dominio de correo verificado. Mientras tanto, seguirás recibiendo todos los avisos
-              dentro de la aplicación.
-            </p>
-            <div className="mt-4 flex flex-col gap-3">
-              <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border bg-background px-4">
-                <input
-                  type="checkbox"
-                  checked={emailCompletion}
-                  onChange={(e) => setEmailCompletion(e.target.checked)}
-                  className="h-5 w-5 accent-primary"
-                />
-                <span className="text-sm text-foreground">
-                  Aviso cuando una visita se complete
-                </span>
-              </label>
-              <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border bg-background px-4">
-                <input
-                  type="checkbox"
-                  checked={emailDelay}
-                  onChange={(e) => setEmailDelay(e.target.checked)}
-                  className="h-5 w-5 accent-primary"
-                />
-                <span className="text-sm text-foreground">
-                  Aviso cuando una visita supere su margen sin completarse
-                </span>
-              </label>
-            </div>
-          </Card>
-
-          <Card className="p-6 animate-fade-up-3">
             <h2 className="text-base font-semibold text-card-foreground">Guía de Relevo</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Vuelve a ver el recorrido guiado por la aplicación.

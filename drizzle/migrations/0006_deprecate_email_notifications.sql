@@ -1,0 +1,3 @@
+COMMENT ON COLUMN public.profiles.email_completion_notifications IS 'DEPRECATED: avisos por correo retirados del producto (2026-10-11); columna sin uso';
+COMMENT ON COLUMN public.profiles.email_delay_notifications IS 'DEPRECATED: avisos por correo retirados del producto (2026-10-11); columna sin uso';
+COMMENT ON TABLE public.email_queue IS 'DEPRECATED: cola de correo sin uso; los avisos por correo se retiraron del producto (2026-10-11)';

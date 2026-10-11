@@ -123,6 +123,20 @@ function AuthedShell() {
 
   const showTour = !tourClosed && guideStatus === "no_iniciada";
 
+  // Aviso de retraso: al abrir la app se comprueba si alguna visita superó
+  // su margen de 90 minutos desde el primer check (sin tarea programada;
+  // como mucho una comprobación cada 15 minutos por dispositivo).
+  useEffect(() => {
+    const KEY = "relevo-delay-check-at";
+    const last = Number(localStorage.getItem(KEY) ?? 0);
+    if (Date.now() - last < 15 * 60_000) return;
+    localStorage.setItem(KEY, String(Date.now()));
+    fetch("/api/public/hooks/visitas-retrasadas", {
+      method: "POST",
+      headers: { authorization: `Bearer ${import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"]}` },
+    }).catch(() => {});
+  }, []);
+
   useEffect(() => {
     function onClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) setMenuOpen(false);
