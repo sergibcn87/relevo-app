@@ -26,6 +26,8 @@ import { Route as InvitacionTokenRouteImport } from './routes/invitacion.$token'
 import { Route as AuthenticatedPlanesPlanIdRouteImport } from './routes/_authenticated/planes_.$planId'
 import { Route as AuthenticatedVisitasVisitaIdRouteImport } from './routes/_authenticated/visitas_.$visitaId'
 import { Route as ApiPublicHooksVisitasRetrasadasRouteImport } from './routes/api/public/hooks/visitas-retrasadas'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -115,6 +117,16 @@ const ApiPublicHooksVisitasRetrasadasRoute =
     path: '/api/public/hooks/visitas-retrasadas',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -133,6 +145,8 @@ export interface FileRoutesByFullPath {
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
   '/api/public/hooks/visitas-retrasadas': typeof ApiPublicHooksVisitasRetrasadasRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -151,6 +165,8 @@ export interface FileRoutesByTo {
   '/planes/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/visitas/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
   '/api/public/hooks/visitas-retrasadas': typeof ApiPublicHooksVisitasRetrasadasRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -171,6 +187,8 @@ export interface FileRoutesById {
   '/_authenticated/planes_/$planId': typeof AuthenticatedPlanesPlanIdRoute
   '/_authenticated/visitas_/$visitaId': typeof AuthenticatedVisitasVisitaIdRoute
   '/api/public/hooks/visitas-retrasadas': typeof ApiPublicHooksVisitasRetrasadasRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,6 +209,8 @@ export interface FileRouteTypes {
     | '/planes/$planId'
     | '/visitas/$visitaId'
     | '/api/public/hooks/visitas-retrasadas'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -209,6 +229,8 @@ export interface FileRouteTypes {
     | '/planes/$planId'
     | '/visitas/$visitaId'
     | '/api/public/hooks/visitas-retrasadas'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   id:
     | '__root__'
     | '/'
@@ -228,6 +250,8 @@ export interface FileRouteTypes {
     | '/_authenticated/planes_/$planId'
     | '/_authenticated/visitas_/$visitaId'
     | '/api/public/hooks/visitas-retrasadas'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -237,6 +261,8 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   InvitacionTokenRoute: typeof InvitacionTokenRoute
   ApiPublicHooksVisitasRetrasadasRoute: typeof ApiPublicHooksVisitasRetrasadasRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -360,6 +386,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksVisitasRetrasadasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -409,6 +449,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   InvitacionTokenRoute: InvitacionTokenRoute,
   ApiPublicHooksVisitasRetrasadasRoute: ApiPublicHooksVisitasRetrasadasRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
