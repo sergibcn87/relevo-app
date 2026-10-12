@@ -11,7 +11,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // Server routes (e.g. /lovable/*) read non-VITE_ secrets such as LOVABLE_API_KEY
 // from process.env; the base config only loads VITE_* vars. Load the rest for
 // server-side code only — never expose these keys to the client bundle.
-const serverEnv = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
+const serverEnv = loadEnv(process.env["NODE_ENV"] ?? "development", process.cwd(), "");
 Object.assign(process.env, serverEnv);
 
 export default defineConfig({
