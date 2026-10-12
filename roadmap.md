@@ -32,6 +32,8 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
   - [x] Función de servidor generatePlanProposal (gateway /v1/responses, json_schema estricto, stream SSE consumido en servidor) + confirmPlanProposal / discardPlanProposal
   - [x] Validación en servidor: tareas sin ficha conocida, fuera de fechas o sin fragmento literal verificable se descartan con aviso; propuestas en ai_proposals (borrador → guardada/descartada)
   - [x] Pantalla /planes-ia: descripción en lenguaje natural, avisos y preguntas de la IA, revisión en dos columnas (propuesta | fragmentos de origen resaltados), creación solo tras confirmar
+- [x] 6a. Vista reducida de cuidador (2026-10-12): sin casa propia y con plan como cuidador → solo Visitas/Avisos/Cuenta, redirección de /inicio, /planes y /fichas a /visitas, banner explicativo y tarjeta «Vista de cuidador» en Cuenta con alta de casa (activa vista de propietario)
+- [ ] 6b. Correos de autenticación con marca Relevo: requiere dominio de correo del usuario (diálogo de configuración presentado); pendiente de que el usuario lo configure
 - [ ] 6. Meteorología (Open-Meteo, reglas por umbral, sugerencias aceptables/descartables, caché 1 h)
 - [ ] 7. Animaciones, pruebas (320/390/768/1440 px) y correcciones
 - [ ] 8. Escenario de demostración (Casa Olmo, Alex, Nora, Monstera, Milo, toldo, paquetes) y evidencias (README, decisiones, guion de vídeo)
