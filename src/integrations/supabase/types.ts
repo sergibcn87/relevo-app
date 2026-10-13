@@ -718,6 +718,32 @@ export type Database = {
           },
         ]
       }
+      weather_cache: {
+        Row: {
+          fetched_at: string
+          house_id: string
+          payload: Json
+        }
+        Insert: {
+          fetched_at: string
+          house_id: string
+          payload: Json
+        }
+        Update: {
+          fetched_at?: string
+          house_id?: string
+          payload?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weather_cache_house_id_fkey"
+            columns: ["house_id"]
+            isOneToOne: true
+            referencedRelation: "houses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       weather_rules: {
         Row: {
           active: boolean
@@ -768,6 +794,7 @@ export type Database = {
       }
       weather_suggestions: {
         Row: {
+          accepted_task_id: string | null
           condition_text: string
           created_at: string
           fetched_at: string
@@ -780,6 +807,7 @@ export type Database = {
           weather_rule_id: string
         }
         Insert: {
+          accepted_task_id?: string | null
           condition_text: string
           created_at?: string
           fetched_at?: string
@@ -792,6 +820,7 @@ export type Database = {
           weather_rule_id: string
         }
         Update: {
+          accepted_task_id?: string | null
           condition_text?: string
           created_at?: string
           fetched_at?: string
@@ -804,6 +833,13 @@ export type Database = {
           weather_rule_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "weather_suggestions_accepted_task_id_fkey"
+            columns: ["accepted_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "weather_suggestions_visit_id_fkey"
             columns: ["visit_id"]
@@ -826,6 +862,10 @@ export type Database = {
     }
     Functions: {
       accept_invitation: { Args: { _token: string }; Returns: string }
+      accept_weather_suggestion: {
+        Args: { _suggestion_id: string }
+        Returns: string
+      }
       close_visit: { Args: { _visit_id: string }; Returns: string }
       invitation_info: {
         Args: { _token: string }
