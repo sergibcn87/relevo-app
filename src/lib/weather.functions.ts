@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Json } from "@/integrations/supabase/types";
 
 /*
  * Meteorología (bloque 6 del PRD §11): Open-Meteo con atribución.
@@ -22,6 +23,10 @@ interface ForecastPayload {
     temperature_2m_max?: (number | null)[];
     wind_gusts_10m_max?: (number | null)[];
   };
+}
+
+interface GeocodingResponse {
+  results?: { latitude: number; longitude: number; timezone?: string }[];
 }
 
 export type WeatherRefreshStatus = "ok" | "sin_ciudad" | "ciudad_no_encontrada" | "error_api";
@@ -56,14 +61,12 @@ export const refreshWeatherSuggestions = createServerFn({ method: "POST" })
     let lon = house.city_lon;
     let timezone = house.timezone || "Europe/Madrid";
     if (lat == null || lon == null) {
-      let geo: {
-        results?: { latitude: number; longitude: number; timezone?: string }[];
-      } | null = null;
+      let geo: GeocodingResponse | null = null;
       try {
         const geoRes = await fetch(
           `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(house.city)}&count=1&language=es&format=json`,
         );
-        if (geoRes.ok) geo = (await geoRes.json()) as typeof geo;
+        if (geoRes.ok) geo = (await geoRes.json()) as GeocodingResponse;
       } catch {
         geo = null;
       }
@@ -108,7 +111,7 @@ export const refreshWeatherSuggestions = createServerFn({ method: "POST" })
         fetchedAt = new Date().toISOString();
         await supabaseAdmin
           .from("weather_cache")
-          .upsert({ house_id: house.id, fetched_at: fetchedAt, payload });
+          .upsert({ house_id: house.id, fetched_at: fetchedAt, payload: payload as Json });
       } catch {
         // PRD: si falla la API se conservan las visitas y no se generan
         // sugerencias nuevas con datos caducados.
@@ -159,6 +162,7 @@ export const refreshWeatherSuggestions = createServerFn({ method: "POST" })
       fetched_at: string;
       status: string;
     }[] = [];
+    const fetchedAtSure = fetchedAt as string;
 
     for (const visit of visits) {
       const localDate = dayFmt.format(new Date(visit.scheduled_at));
@@ -180,7 +184,7 @@ export const refreshWeatherSuggestions = createServerFn({ method: "POST" })
           forecast_date: localDate,
           forecast_value: rounded,
           source: "Open-Meteo",
-          fetched_at: fetchedAt,
+          fetched_at: fetchedAtSure,
           status: "pendiente",
         });
       }

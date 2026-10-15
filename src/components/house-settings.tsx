@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Loader2, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { WeatherRulesSection } from "@/components/weather-rules";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -87,7 +88,7 @@ export function HouseSettings({ house, open, onOpenChange }: HouseSettingsProps)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-h-[85vh] overflow-y-auto max-w-md">
         <DialogHeader>
           <DialogTitle>Ajustes de la casa</DialogTitle>
           <DialogDescription>
@@ -167,6 +168,7 @@ export function HouseSettings({ house, open, onOpenChange }: HouseSettingsProps)
             </Button>
           </div>
         </form>
+        <WeatherRulesSection houseId={house.id} hasCity={!!city.trim()} />
       </DialogContent>
     </Dialog>
   );

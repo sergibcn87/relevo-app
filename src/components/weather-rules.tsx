@@ -105,6 +105,9 @@ export function WeatherRulesSection({ houseId, hasCity }: WeatherRulesSectionPro
     setInstruction("");
     setThreshold("");
     setCardId("none");
+    // Permite que la próxima vista del plan reevalúe la previsión en caché
+    // sin esperar al límite de 15 minutos por dispositivo.
+    sessionStorage.removeItem(`relevo-weather-refresh-${houseId}`);
     invalidate();
   }
 

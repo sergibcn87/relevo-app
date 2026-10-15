@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState, type FormEvent } from "react";
-import { Home, Loader2, MapPin, PawPrint, Pencil, Users } from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
+import { CloudSun, Home, Loader2, MapPin, PawPrint, Pencil, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { HouseSettings, type HouseSummary } from "@/components/house-settings";
+import { refreshHouseWeatherThrottled } from "@/components/weather-suggestions";
+import { formatDateEs } from "@/lib/visits";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -64,6 +66,54 @@ function InicioPage() {
       return data ?? [];
     },
   });
+
+  // Sugerencias meteorológicas pendientes de las casas del propietario (PRD §12: el panel las muestra)
+  const { data: weatherPending = [] } = useQuery({
+    queryKey: ["weather-pending", user.id],
+    enabled: houses.length > 0,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("weather_suggestions")
+        .select(
+          "id, forecast_date, condition_text, visits!inner(plan_id, plans!inner(title, houses!inner(owner_id)))",
+        )
+        .eq("status", "pendiente")
+        .eq("visits.plans.houses.owner_id", user.id)
+        .order("forecast_date", { ascending: true })
+        .limit(4);
+      return (data ?? []) as unknown as {
+        id: string;
+        forecast_date: string;
+        condition_text: string;
+        visits: { plan_id: string; plans: { title: string } | null } | null;
+      }[];
+    },
+  });
+
+  // Actualiza la previsión de las casas con ciudad (limitado: 15 min por
+  // dispositivo aquí y 1 h de caché en el servidor)
+  useEffect(() => {
+    const withCity = houses.filter((h) => h.city);
+    if (withCity.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      let anyCreated = false;
+      for (const house of withCity) {
+        try {
+          const result = await refreshHouseWeatherThrottled(house.id);
+          if (result && result.status === "ok" && result.created > 0) anyCreated = true;
+        } catch {
+          // El panel no bloquea por un fallo puntual de la previsión
+        }
+      }
+      if (!cancelled && anyCreated) {
+        queryClient.invalidateQueries({ queryKey: ["weather-pending", user.id] });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [houses, queryClient, user.id]);
 
   async function handleCreateHouse(event: FormEvent) {
     event.preventDefault();
@@ -182,6 +232,42 @@ function InicioPage() {
               </div>
             </Card>
           ))}
+
+          {houses.length > 0 && (
+            <Card className="p-6 animate-fade-up-2">
+              <div className="flex items-center gap-2">
+                <CloudSun className="h-5 w-5 text-primary" aria-hidden />
+                <h2 className="text-lg font-semibold text-card-foreground">Tiempo</h2>
+              </div>
+              {weatherPending.length === 0 ? (
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Sin sugerencias de tiempo pendientes. Puedes crear reglas meteorológicas desde
+                  «Editar casa».
+                </p>
+              ) : (
+                <ul className="mt-3 flex flex-col gap-2">
+                  {weatherPending.map((s) => (
+                    <li key={s.id}>
+                      <Link
+                        to="/planes/$planId"
+                        params={{ planId: s.visits?.plan_id ?? "" }}
+                        className="flex flex-col gap-0.5 rounded-xl border border-border bg-background px-4 py-3 transition-colors hover:bg-secondary/40"
+                      >
+                        <span className="text-sm font-medium text-foreground">
+                          {s.condition_text}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {s.visits?.plans?.title ?? "Plan"} · {formatDateEs(s.forecast_date)} —
+                          revisar en el plan
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <p className="mt-3 text-xs text-muted-foreground">Datos de Open-Meteo.</p>
+            </Card>
+          )}
 
           {caregiverPlans.length > 0 && (
             <Card className="p-6 animate-fade-up-2">

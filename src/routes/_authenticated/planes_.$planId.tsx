@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/dialog";
 import { IncidentDialog } from "@/components/incident-dialog";
 import { SignedPhoto } from "@/components/signed-photo";
+import { WeatherSuggestions } from "@/components/weather-suggestions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/planes_/$planId")({
@@ -355,6 +356,16 @@ function PlanDetailPage() {
           </p>
         )}
       </Card>
+
+      {/* Sugerencias meteorológicas (solo propietario) */}
+      {isOwner && (
+        <WeatherSuggestions
+          planId={plan.id}
+          houseId={plan.house_id}
+          houseCity={plan.houses?.city ?? null}
+          visits={visits}
+        />
+      )}
 
       {/* Visitas */}
       <section className="mt-8" aria-label="Visitas del plan">
