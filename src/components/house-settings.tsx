@@ -158,7 +158,6 @@ export function HouseSettings({ house, open, onOpenChange }: HouseSettingsProps)
               </p>
             )}
           </div>
-          <WeatherRulesSection houseId={house.id} hasCity={!!city.trim()} />
           <div className="mt-2 flex justify-end gap-2">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
               Cancelar
@@ -169,6 +168,7 @@ export function HouseSettings({ house, open, onOpenChange }: HouseSettingsProps)
             </Button>
           </div>
         </form>
+        <WeatherRulesSection houseId={house.id} hasCity={!!city.trim()} />
       </DialogContent>
     </Dialog>
   );
