@@ -90,14 +90,14 @@ function PlanesPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="flex items-start justify-between gap-3">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <h1 className="text-2xl font-bold text-foreground">Planes</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Cada plan es una ausencia: fechas, visitas y cuidador.
           </p>
         </div>
-        <div className="flex shrink-0 flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 sm:shrink-0">
           <Link to="/planes-ia">
             <Button variant="outline">
               <Sparkles className="h-4 w-4" aria-hidden /> Crear con IA
