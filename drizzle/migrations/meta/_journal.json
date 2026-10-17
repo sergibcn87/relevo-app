@@ -57,6 +57,13 @@
       "when": 1791906226314,
       "tag": "0007_weather_cache_and_suggestion_acceptance",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792234568604,
+      "tag": "0008_demo_scenario",
+      "breakpoints": true
     }
   ]
 }
