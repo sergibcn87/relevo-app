@@ -49,7 +49,7 @@ function InicioPage() {
     queryFn: async () => {
       const { data } = await supabase
         .from("houses")
-        .select("id, name, city, rooms")
+        .select("id, name, city, rooms, is_demo")
         .order("created_at", { ascending: true });
       return data ?? [];
     },
@@ -202,7 +202,14 @@ function InicioPage() {
             <Card key={house.id} className="p-6 bg-hero-card animate-fade-up-1">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-lg font-semibold text-card-foreground">{house.name}</h2>
+                  <h2 className="text-lg font-semibold text-card-foreground">
+                    {house.name}
+                    {house.is_demo && (
+                      <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 align-middle text-xs font-semibold text-secondary-foreground">
+                        Demostración
+                      </span>
+                    )}
+                  </h2>
                   {house.city && (
                     <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4" aria-hidden /> {house.city}
