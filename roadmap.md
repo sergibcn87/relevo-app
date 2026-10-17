@@ -35,7 +35,7 @@ PRD de referencia: documento subido por el usuario (698 líneas). Idioma: españ
 - [x] 6a. Vista reducida de cuidador (2026-10-12): sin casa propia y con plan como cuidador → solo Visitas/Avisos/Cuenta, redirección de /inicio, /planes y /fichas a /visitas, banner explicativo y tarjeta «Vista de cuidador» en Cuenta con alta de casa (activa vista de propietario)
 - [ ] 6b. Correos de autenticación con marca Relevo: dominio info.relevo.com añadido y plantillas personalizadas (español, logo y colores Relevo, 6 tipos vía /lovable/email/auth/webhook); pendiente de verificación DNS (registros NS/TXT en el proveedor del dominio) — se activan solos al verificar
 - [x] 6. Meteorología (Open-Meteo, reglas por umbral, sugerencias aceptables/descartables, caché 1 h) — reglas por casa en «Editar casa» (variable temperatura máxima / racha de viento, umbral, instrucción, ficha opcional, activar/desactivar); refreshWeatherSuggestions (función de servidor, geocodificación perezosa de la ciudad, caché 1 h en weather_cache, evalúa el día local de visitas pendientes/en curso de planes abiertos/activos, upsert sin duplicados, sin sugerencias con datos caducados si falla la API); bloque «Tiempo» en el detalle del plan (aceptar = tarea adicional vía accept_weather_suggestion, anti-duplicados; descartar) y tarjeta compacta en Resumen; atribución Open-Meteo
-- [ ] 7. Animaciones, pruebas (320/390/768/1440 px) y correcciones
+- [x] 7. Animaciones, pruebas (320/390/768/1440 px) y correcciones — 11 pantallas revisadas en 4 anchos; corregido desbordamiento de la cabecera de Planes en móvil
 - [ ] 8. Escenario de demostración (Casa Olmo, Alex, Nora, Monstera, Milo, toldo, paquetes) y evidencias (README, decisiones, guion de vídeo)
 
 ## Notas
