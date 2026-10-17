@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { GUIDE_VERSION } from "@/components/guide-tour";
+import { DemoScenarioCard } from "@/components/demo-scenario-card";
 
 export const Route = createFileRoute("/_authenticated/cuenta")({
   head: () => ({
@@ -251,6 +252,9 @@ function CuentaPage() {
               Ver guía de nuevo
             </Button>
           </Card>
+
+          <DemoScenarioCard />
+
 
           <div className="flex flex-wrap items-center gap-3">
             <Button type="submit" disabled={saving}>

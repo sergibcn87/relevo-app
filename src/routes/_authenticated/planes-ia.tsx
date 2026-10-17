@@ -286,7 +286,20 @@ function PlanesIaPage() {
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="ai-description">Describe tu ausencia</Label>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <Label htmlFor="ai-description">Describe tu ausencia</Label>
+                <button
+                  type="button"
+                  className="text-xs font-semibold text-primary hover:underline"
+                  onClick={() =>
+                    setDescription(
+                      "Nos vamos a Lisboa cinco días. Nora pasará por casa cada tarde sobre las 19:00. Milo tiene que comer todos los días y la Monstera solo se riega si la tierra está seca. Si llegan paquetes, que los recoja.",
+                    )
+                  }
+                >
+                  Usar texto de ejemplo (demo)
+                </button>
+              </div>
               <Textarea
                 id="ai-description"
                 value={description}
