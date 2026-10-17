@@ -243,6 +243,7 @@ export type Database = {
           city_lon: number | null
           created_at: string
           id: string
+          is_demo: boolean
           name: string
           owner_id: string
           rooms: string[]
@@ -254,6 +255,7 @@ export type Database = {
           city_lon?: number | null
           created_at?: string
           id?: string
+          is_demo?: boolean
           name: string
           owner_id: string
           rooms?: string[]
@@ -265,6 +267,7 @@ export type Database = {
           city_lon?: number | null
           created_at?: string
           id?: string
+          is_demo?: boolean
           name?: string
           owner_id?: string
           rooms?: string[]
@@ -885,6 +888,7 @@ export type Database = {
       is_plan_participant: { Args: { _plan_id: string }; Returns: boolean }
       is_task_participant: { Args: { _task_id: string }; Returns: boolean }
       is_visit_participant: { Args: { _visit_id: string }; Returns: boolean }
+      load_demo_scenario: { Args: never; Returns: string }
       shares_plan_with: { Args: { _profile_id: string }; Returns: boolean }
     }
     Enums: {
