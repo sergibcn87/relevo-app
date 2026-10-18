@@ -92,7 +92,7 @@ export function HouseSettings({ house, open, onOpenChange }: HouseSettingsProps)
         <DialogHeader>
           <DialogTitle>Ajustes de la casa</DialogTitle>
           <DialogDescription>
-            Nombre, ciudad para el tiempo y las estancias que aparecen en las fichas.
+            Nombre, ciudad para el tiempo y las estancias que aparecen en las tareas.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSave} className="flex flex-col gap-4">
@@ -154,7 +154,7 @@ export function HouseSettings({ house, open, onOpenChange }: HouseSettingsProps)
               </ul>
             ) : (
               <p className="text-xs text-muted-foreground">
-                Sin estancias: las fichas no pedirán ubicación.
+                Sin estancias: las tareas no pedirán ubicación.
               </p>
             )}
           </div>

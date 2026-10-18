@@ -187,7 +187,7 @@ export function WeatherSuggestions({ planId, houseId, houseCity, visits }: Weath
                   <p className="text-xs text-muted-foreground">
                     Para el {formatDateEs(s.forecast_date)} · {s.weather_rules?.instruction}
                     {s.weather_rules?.care_cards?.name
-                      ? ` · Ficha: ${s.weather_rules.care_cards.name}`
+                      ? ` · Tarea: ${s.weather_rules.care_cards.name}`
                       : ""}
                   </p>
                   <div className="flex flex-wrap gap-2">

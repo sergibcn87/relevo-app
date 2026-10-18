@@ -33,7 +33,7 @@ interface IncidentDialogProps {
   onCreated?: () => void;
 }
 
-/** Diálogo para abrir una incidencia (título, descripción, ficha y foto opcionales). */
+/** Diálogo para abrir una incidencia (título, descripción, tarea y foto opcionales). */
 export function IncidentDialog({
   planId,
   houseId,
@@ -133,7 +133,7 @@ export function IncidentDialog({
           {careCards.length > 0 && (
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="incident-card">
-                Ficha relacionada{" "}
+                Tarea relacionada{" "}
                 <span className="font-normal text-muted-foreground">(opcional)</span>
               </Label>
               <Select value={careCardId} onValueChange={setCareCardId}>

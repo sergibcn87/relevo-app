@@ -38,7 +38,7 @@ interface WeatherRulesSectionProps {
   hasCity: boolean;
 }
 
-/** Reglas meteorológicas de la casa (PRD §11): variable, umbral, instrucción y ficha opcional. */
+/** Reglas meteorológicas de la casa (PRD §11): variable, umbral, instrucción y tarea opcional. */
 export function WeatherRulesSection({ houseId, hasCity }: WeatherRulesSectionProps) {
   const queryClient = useQueryClient();
   const [cardId, setCardId] = useState("none");
@@ -163,7 +163,7 @@ export function WeatherRulesSection({ houseId, hasCity }: WeatherRulesSectionPro
                 </p>
                 <p className="mt-0.5 truncate text-xs text-muted-foreground">
                   {rule.instruction}
-                  {rule.care_cards?.name ? ` · Ficha: ${rule.care_cards.name}` : ""}
+                  {rule.care_cards?.name ? ` · Tarea: ${rule.care_cards.name}` : ""}
                 </p>
               </div>
               <div className="flex shrink-0 items-center gap-1.5">
@@ -224,14 +224,14 @@ export function WeatherRulesSection({ houseId, hasCity }: WeatherRulesSectionPro
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="wr-card" className="text-xs">
-            Ficha relacionada <span className="font-normal text-muted-foreground">(opcional)</span>
+            Tarea relacionada <span className="font-normal text-muted-foreground">(opcional)</span>
           </Label>
           <Select value={cardId} onValueChange={setCardId}>
             <SelectTrigger id="wr-card">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">Sin ficha concreta</SelectItem>
+              <SelectItem value="none">Sin tarea concreta</SelectItem>
               {cards.map((card) => (
                 <SelectItem key={card.id} value={card.id}>
                   {card.name}
