@@ -15,11 +15,11 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAvisosRouteImport } from './routes/_authenticated/avisos'
 import { Route as AuthenticatedCuentaRouteImport } from './routes/_authenticated/cuenta'
-import { Route as AuthenticatedFichasRouteImport } from './routes/_authenticated/fichas'
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedPlanesRouteImport } from './routes/_authenticated/planes'
 import { Route as AuthenticatedPlanesIaRouteImport } from './routes/_authenticated/planes-ia'
 import { Route as AuthenticatedPlanesNuevoRouteImport } from './routes/_authenticated/planes-nuevo'
+import { Route as AuthenticatedTareasRouteImport } from './routes/_authenticated/tareas'
 import { Route as AuthenticatedVisitasRouteImport } from './routes/_authenticated/visitas'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as InvitacionTokenRouteImport } from './routes/invitacion.$token'
@@ -58,11 +58,6 @@ const AuthenticatedCuentaRoute = AuthenticatedCuentaRouteImport.update({
   path: '/cuenta',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedFichasRoute = AuthenticatedFichasRouteImport.update({
-  id: '/fichas',
-  path: '/fichas',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedInicioRoute = AuthenticatedInicioRouteImport.update({
   id: '/inicio',
   path: '/inicio',
@@ -84,6 +79,11 @@ const AuthenticatedPlanesNuevoRoute =
     path: '/planes-nuevo',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedTareasRoute = AuthenticatedTareasRouteImport.update({
+  id: '/tareas',
+  path: '/tareas',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedVisitasRoute = AuthenticatedVisitasRouteImport.update({
   id: '/visitas',
   path: '/visitas',
@@ -134,11 +134,11 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/avisos': typeof AuthenticatedAvisosRoute
   '/cuenta': typeof AuthenticatedCuentaRoute
-  '/fichas': typeof AuthenticatedFichasRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/planes': typeof AuthenticatedPlanesRoute
   '/planes-ia': typeof AuthenticatedPlanesIaRoute
   '/planes-nuevo': typeof AuthenticatedPlanesNuevoRoute
+  '/tareas': typeof AuthenticatedTareasRoute
   '/visitas': typeof AuthenticatedVisitasRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
@@ -154,11 +154,11 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/avisos': typeof AuthenticatedAvisosRoute
   '/cuenta': typeof AuthenticatedCuentaRoute
-  '/fichas': typeof AuthenticatedFichasRoute
   '/inicio': typeof AuthenticatedInicioRoute
   '/planes': typeof AuthenticatedPlanesRoute
   '/planes-ia': typeof AuthenticatedPlanesIaRoute
   '/planes-nuevo': typeof AuthenticatedPlanesNuevoRoute
+  '/tareas': typeof AuthenticatedTareasRoute
   '/visitas': typeof AuthenticatedVisitasRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
@@ -176,11 +176,11 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/avisos': typeof AuthenticatedAvisosRoute
   '/_authenticated/cuenta': typeof AuthenticatedCuentaRoute
-  '/_authenticated/fichas': typeof AuthenticatedFichasRoute
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
   '/_authenticated/planes': typeof AuthenticatedPlanesRoute
   '/_authenticated/planes-ia': typeof AuthenticatedPlanesIaRoute
   '/_authenticated/planes-nuevo': typeof AuthenticatedPlanesNuevoRoute
+  '/_authenticated/tareas': typeof AuthenticatedTareasRoute
   '/_authenticated/visitas': typeof AuthenticatedVisitasRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/invitacion/$token': typeof InvitacionTokenRoute
@@ -198,11 +198,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/avisos'
     | '/cuenta'
-    | '/fichas'
     | '/inicio'
     | '/planes'
     | '/planes-ia'
     | '/planes-nuevo'
+    | '/tareas'
     | '/visitas'
     | '/auth/callback'
     | '/invitacion/$token'
@@ -218,11 +218,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/avisos'
     | '/cuenta'
-    | '/fichas'
     | '/inicio'
     | '/planes'
     | '/planes-ia'
     | '/planes-nuevo'
+    | '/tareas'
     | '/visitas'
     | '/auth/callback'
     | '/invitacion/$token'
@@ -239,11 +239,11 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/avisos'
     | '/_authenticated/cuenta'
-    | '/_authenticated/fichas'
     | '/_authenticated/inicio'
     | '/_authenticated/planes'
     | '/_authenticated/planes-ia'
     | '/_authenticated/planes-nuevo'
+    | '/_authenticated/tareas'
     | '/_authenticated/visitas'
     | '/auth/callback'
     | '/invitacion/$token'
@@ -309,13 +309,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCuentaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/fichas': {
-      id: '/_authenticated/fichas'
-      path: '/fichas'
-      fullPath: '/fichas'
-      preLoaderRoute: typeof AuthenticatedFichasRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/inicio': {
       id: '/_authenticated/inicio'
       path: '/inicio'
@@ -342,6 +335,13 @@ declare module '@tanstack/react-router' {
       path: '/planes-nuevo'
       fullPath: '/planes-nuevo'
       preLoaderRoute: typeof AuthenticatedPlanesNuevoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tareas': {
+      id: '/_authenticated/tareas'
+      path: '/tareas'
+      fullPath: '/tareas'
+      preLoaderRoute: typeof AuthenticatedTareasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/visitas': {
@@ -406,11 +406,11 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAvisosRoute: typeof AuthenticatedAvisosRoute
   AuthenticatedCuentaRoute: typeof AuthenticatedCuentaRoute
-  AuthenticatedFichasRoute: typeof AuthenticatedFichasRoute
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
   AuthenticatedPlanesRoute: typeof AuthenticatedPlanesRoute
   AuthenticatedPlanesIaRoute: typeof AuthenticatedPlanesIaRoute
   AuthenticatedPlanesNuevoRoute: typeof AuthenticatedPlanesNuevoRoute
+  AuthenticatedTareasRoute: typeof AuthenticatedTareasRoute
   AuthenticatedVisitasRoute: typeof AuthenticatedVisitasRoute
   AuthenticatedPlanesPlanIdRoute: typeof AuthenticatedPlanesPlanIdRoute
   AuthenticatedVisitasVisitaIdRoute: typeof AuthenticatedVisitasVisitaIdRoute
@@ -419,11 +419,11 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAvisosRoute: AuthenticatedAvisosRoute,
   AuthenticatedCuentaRoute: AuthenticatedCuentaRoute,
-  AuthenticatedFichasRoute: AuthenticatedFichasRoute,
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
   AuthenticatedPlanesRoute: AuthenticatedPlanesRoute,
   AuthenticatedPlanesIaRoute: AuthenticatedPlanesIaRoute,
   AuthenticatedPlanesNuevoRoute: AuthenticatedPlanesNuevoRoute,
+  AuthenticatedTareasRoute: AuthenticatedTareasRoute,
   AuthenticatedVisitasRoute: AuthenticatedVisitasRoute,
   AuthenticatedPlanesPlanIdRoute: AuthenticatedPlanesPlanIdRoute,
   AuthenticatedVisitasVisitaIdRoute: AuthenticatedVisitasVisitaIdRoute,

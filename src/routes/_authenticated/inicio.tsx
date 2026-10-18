@@ -223,9 +223,9 @@ function InicioPage() {
                 Planes.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Link to="/fichas">
+                <Link to="/tareas">
                   <Button variant="secondary" size="sm">
-                    <PawPrint className="h-4 w-4" aria-hidden /> Ver fichas
+                    <PawPrint className="h-4 w-4" aria-hidden /> Ver tareas
                   </Button>
                 </Link>
                 <Link to="/planes">
