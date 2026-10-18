@@ -30,7 +30,7 @@ const features = [
   {
     icon: ClipboardList,
     title: "Instrucciones claras",
-    text: "Fichas de cuidado para plantas, mascotas y casa, reutilizables en cada ausencia.",
+    text: "Tareas de cuidado para plantas, mascotas y casa, reutilizables en cada ausencia.",
   },
   {
     icon: CalendarCheck,

@@ -179,7 +179,7 @@ function PlanesPage() {
               <Map className="h-8 w-8 text-primary" aria-hidden />
               <h2 className="text-base font-semibold text-card-foreground">Aún no hay planes</h2>
               <p className="max-w-sm text-sm text-muted-foreground">
-                Crea tu primera ausencia paso a paso: fechas, fichas y visitas. Después invitarás a
+                Crea tu primera ausencia paso a paso: fechas, tareas y visitas. Después invitarás a
                 tu cuidador con un enlace.
               </p>
               <Link to="/planes-nuevo">

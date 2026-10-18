@@ -40,14 +40,14 @@ const desktopNav = [
   { to: "/inicio", label: "Resumen", icon: Home },
   { to: "/planes", label: "Planes", icon: Map },
   { to: "/visitas", label: "Visitas", icon: CalendarCheck },
-  { to: "/fichas", label: "Fichas", icon: Leaf },
+  { to: "/tareas", label: "Tareas", icon: Leaf },
   { to: "/cuenta", label: "Cuenta", icon: UserRound },
 ] as const;
 
 const mobileNav = [
   { to: "/inicio", label: "Inicio", icon: Home },
   { to: "/visitas", label: "Visitas", icon: CalendarCheck },
-  { to: "/fichas", label: "Fichas", icon: Leaf },
+  { to: "/tareas", label: "Tareas", icon: Leaf },
 ] as const;
 
 function AuthedShell() {
@@ -178,7 +178,7 @@ function AuthedShell() {
   const caregiverOnly =
     !!tourContext && tourContext.ownedHouses === 0 && tourContext.caregiverPlans > 0;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const ownerOnlyPath = ["/inicio", "/planes", "/fichas"].some((p) => pathname.startsWith(p));
+  const ownerOnlyPath = ["/inicio", "/planes", "/tareas"].some((p) => pathname.startsWith(p));
 
   const visibleDesktopNav = caregiverOnly
     ? desktopNav.filter((i) => i.to === "/visitas" || i.to === "/cuenta")

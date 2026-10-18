@@ -272,7 +272,7 @@ function NuevoPlanPage() {
       return;
     }
     if (selectedCardIds.length === 0) {
-      toast.error("Selecciona al menos una ficha para las visitas.");
+      toast.error("Selecciona al menos una tarea para las visitas.");
       return;
     }
     if (previewTimes.length === 0) {
@@ -334,7 +334,7 @@ function NuevoPlanPage() {
       return;
     }
 
-    // 3. Tareas: una por ficha seleccionada en cada visita
+    // 3. Tareas de la visita: una por tarea seleccionada en cada visita
     const cardMap = new Map(cards.map((c) => [c.id, c]));
     const taskRows = visitsData.flatMap((v) =>
       selectedCardIds.map((cardId, i) => ({
@@ -358,7 +358,7 @@ function NuevoPlanPage() {
       plan_id: id,
       actor_id: user.id,
       type: "plan_publicado",
-      message: `Plan «${title.trim()}» publicado con ${previewTimes.length} visitas y ${selectedCardIds.length} fichas.`,
+      message: `Plan «${title.trim()}» publicado con ${previewTimes.length} visitas y ${selectedCardIds.length} tareas.`,
     });
 
     setPublishing(false);
@@ -421,7 +421,7 @@ function NuevoPlanPage() {
       </ol>
       <p className="mt-2 text-xs font-medium text-muted-foreground">
         Paso {step} de 3 —{" "}
-        {step === 1 ? "Fechas" : step === 2 ? "Fichas y visitas" : "Revisión"}
+        {step === 1 ? "Fechas" : step === 2 ? "Tareas y visitas" : "Revisión"}
       </p>
 
       {step === 1 && (
@@ -485,12 +485,12 @@ function NuevoPlanPage() {
         <div className="mt-5 flex flex-col gap-5">
           <Card className="p-6 animate-fade-up">
             <h2 className="text-base font-semibold text-card-foreground">
-              ¿Qué fichas hay que cuidar?
+              ¿Qué tareas hay que cuidar?
             </h2>
             {cards.length === 0 ? (
               <p className="mt-2 text-sm text-muted-foreground">
-                Todavía no hay fichas en esta casa.{" "}
-                <Link to="/fichas" className="font-medium text-primary underline">
+                Todavía no hay tareas en esta casa.{" "}
+                <Link to="/tareas" className="font-medium text-primary underline">
                   Crea la primera
                 </Link>{" "}
                 y vuelve aquí: tu borrador se conserva.
@@ -681,7 +681,7 @@ function NuevoPlanPage() {
               </dd>
             </div>
             <div>
-              <dt className="font-medium text-muted-foreground">Fichas</dt>
+              <dt className="font-medium text-muted-foreground">Tareas</dt>
               <dd className="text-foreground">
                 {selectedCards.length === 0
                   ? "Ninguna seleccionada"

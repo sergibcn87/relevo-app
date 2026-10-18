@@ -32,19 +32,19 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/fichas")({
+export const Route = createFileRoute("/_authenticated/tareas")({
   head: () => ({
     meta: [
-      { title: "Fichas — Relevo" },
-      { name: "description", content: "Fichas de cuidado de plantas, mascotas y casa en Relevo." },
-      { property: "og:title", content: "Fichas — Relevo" },
+      { title: "Tareas — Relevo" },
+      { name: "description", content: "Tareas de cuidado de plantas, mascotas y casa en Relevo." },
+      { property: "og:title", content: "Tareas — Relevo" },
       {
         property: "og:description",
-        content: "Fichas de cuidado de plantas, mascotas y casa en Relevo.",
+        content: "Tareas de cuidado de plantas, mascotas y casa en Relevo.",
       },
     ],
   }),
-  component: FichasPage,
+  component: TareasPage,
 });
 
 interface CareCard {
@@ -126,7 +126,7 @@ function categoryMeta(category: string) {
   return CATEGORIES.find((c) => c.id === category) ?? CATEGORIES[2];
 }
 
-/** URLs firmadas para las fotos privadas de las fichas. */
+/** URLs firmadas para las fotos privadas de las tareas. */
 function useSignedUrls(paths: string[]) {
   const key = [...paths].sort().join(",");
   return useQuery({
@@ -142,7 +142,7 @@ function useSignedUrls(paths: string[]) {
   });
 }
 
-function FichasPage() {
+function TareasPage() {
   const { user } = Route.useRouteContext();
   const queryClient = useQueryClient();
   const [selectedHouseId, setSelectedHouseId] = useState<string | null>(null);
@@ -193,10 +193,10 @@ function FichasPage() {
       .update({ archived: !card.archived })
       .eq("id", card.id);
     if (error) {
-      toast.error("No se ha podido actualizar la ficha.");
+      toast.error("No se ha podido actualizar la tarea.");
       return;
     }
-    toast.success(card.archived ? "Ficha restaurada." : "Ficha archivada.");
+    toast.success(card.archived ? "Tarea restaurada." : "Tarea archivada.");
     queryClient.invalidateQueries({ queryKey: ["care-cards", house?.id] });
   }
 
@@ -216,14 +216,14 @@ function FichasPage() {
     <div className="mx-auto max-w-3xl">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Fichas</h1>
+          <h1 className="text-2xl font-bold text-foreground">Tareas</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Instrucciones de cuidado para plantas, mascotas y casa. Se reutilizan en cada plan.
           </p>
         </div>
         {house && (
           <Button onClick={openCreate} className="shrink-0">
-            <Plus className="h-4 w-4" aria-hidden /> Nueva ficha
+            <Plus className="h-4 w-4" aria-hidden /> Nueva tarea
           </Button>
         )}
       </div>
@@ -238,14 +238,14 @@ function FichasPage() {
 
       {isLoading ? (
         <p className="mt-8 flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Cargando fichas…
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Cargando tareas…
         </p>
       ) : !house ? (
         <Card className="mt-6 flex flex-col items-center gap-3 p-10 text-center animate-fade-up-1">
           <Home className="h-8 w-8 text-primary" aria-hidden />
           <h2 className="text-base font-semibold text-card-foreground">Primero crea tu casa</h2>
           <p className="max-w-sm text-sm text-muted-foreground">
-            Las fichas pertenecen a una casa. Crea la tuya desde el Resumen y vuelve aquí.
+            Las tareas pertenecen a una casa. Crea la tuya desde el Resumen y vuelve aquí.
           </p>
           <Link to="/inicio">
             <Button variant="secondary" size="sm">Ir al Resumen</Button>
@@ -254,12 +254,12 @@ function FichasPage() {
       ) : active.length === 0 && archived.length === 0 ? (
         <Card className="mt-6 flex flex-col items-center gap-3 p-10 text-center animate-fade-up-1">
           <Leaf className="h-8 w-8 text-primary" aria-hidden />
-          <h2 className="text-base font-semibold text-card-foreground">Todavía no hay fichas</h2>
+          <h2 className="text-base font-semibold text-card-foreground">Todavía no hay tareas</h2>
           <p className="max-w-sm text-sm text-muted-foreground">
             Crea la primera con una plantilla o en blanco: foto, instrucciones y notas importantes.
           </p>
           <Button onClick={openCreate} size="sm" className="mt-1">
-            <Plus className="h-4 w-4" aria-hidden /> Nueva ficha
+            <Plus className="h-4 w-4" aria-hidden /> Nueva tarea
           </Button>
         </Card>
       ) : (
@@ -321,7 +321,7 @@ function FichasPage() {
           })}
 
           {archived.length > 0 && (
-            <section aria-label="Fichas archivadas">
+            <section aria-label="Tareas archivadas">
               <button
                 type="button"
                 onClick={() => setShowArchived((v) => !v)}
@@ -448,10 +448,10 @@ function CardDialog({ house, card, open, onOpenChange }: CardDialogProps) {
       : await supabase.from("care_cards").insert({ ...payload, house_id: house.id });
     setSaving(false);
     if (error) {
-      toast.error("No se ha podido guardar la ficha.");
+      toast.error("No se ha podido guardar la tarea.");
       return;
     }
-    toast.success(card ? "Ficha actualizada." : "Ficha creada.");
+    toast.success(card ? "Tarea actualizada." : "Tarea creada.");
     queryClient.invalidateQueries({ queryKey: ["care-cards", house.id] });
     onOpenChange(false);
   }
@@ -460,7 +460,7 @@ function CardDialog({ house, card, open, onOpenChange }: CardDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{card ? "Editar ficha" : "Nueva ficha"}</DialogTitle>
+          <DialogTitle>{card ? "Editar tarea" : "Nueva tarea"}</DialogTitle>
           <DialogDescription>
             {card
               ? "Actualiza las instrucciones que verá tu cuidador."
@@ -617,7 +617,7 @@ function CardDialog({ house, card, open, onOpenChange }: CardDialogProps) {
               </Button>
               <Button type="submit" disabled={saving}>
                 {saving && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
-                {card ? "Guardar cambios" : "Crear ficha"}
+                {card ? "Guardar cambios" : "Crear tarea"}
               </Button>
             </div>
           </form>

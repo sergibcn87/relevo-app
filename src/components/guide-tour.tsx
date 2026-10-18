@@ -25,13 +25,13 @@ const STEPS: Record<GuideRole, GuideStep[]> = {
       targets: ['[data-tour="nav-inicio"]', '[data-tour="mnav-inicio"]'],
     },
     {
-      title: "Fichas de cuidado",
-      body: "Crea fichas para plantas, mascotas y hogar con foto e instrucciones. Se reutilizan en cada plan.",
-      targets: ['[data-tour="nav-fichas"]', '[data-tour="mnav-fichas"]'],
+      title: "Tareas",
+      body: "Crea tareas para plantas, mascotas y hogar con foto e instrucciones. Se reutilizan en cada plan.",
+      targets: ['[data-tour="nav-tareas"]', '[data-tour="mnav-tareas"]'],
     },
     {
       title: "Planes",
-      body: "Cada ausencia es un plan: fechas, visitas y fichas. Al publicarlo podrás invitar a tu cuidador.",
+      body: "Cada ausencia es un plan: fechas, visitas y tareas. Al publicarlo podrás invitar a tu cuidador.",
       targets: ['[data-tour="nav-planes"]'],
     },
     {

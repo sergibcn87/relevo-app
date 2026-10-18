@@ -160,7 +160,7 @@ function InicioPage() {
                 <div>
                   <h2 className="text-lg font-semibold text-card-foreground">Crea tu casa</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Tu casa reúne las fichas de cuidado (plantas, mascotas y hogar) que luego se
+                    Tu casa reúne las tareas de cuidado (plantas, mascotas y hogar) que luego se
                     usan en cada plan. Si alguien te ha invitado como cuidador, no necesitas crear
                     una casa: abre el enlace de invitación.
                   </p>
@@ -219,13 +219,13 @@ function InicioPage() {
                 <Home className="h-6 w-6 text-primary" aria-hidden />
               </div>
               <p className="mt-4 text-sm text-muted-foreground">
-                Añade fichas de cuidado desde la sección Fichas y crea tu primera ausencia desde
+                Añade tareas de cuidado desde la sección Tareas y crea tu primera ausencia desde
                 Planes.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Link to="/fichas">
+                <Link to="/tareas">
                   <Button variant="secondary" size="sm">
-                    <PawPrint className="h-4 w-4" aria-hidden /> Ver fichas
+                    <PawPrint className="h-4 w-4" aria-hidden /> Ver tareas
                   </Button>
                 </Link>
                 <Link to="/planes">
