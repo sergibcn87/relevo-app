@@ -626,3 +626,130 @@ function CardDialog({ house, card, open, onOpenChange }: CardDialogProps) {
     </Dialog>
   );
 }
+
+interface PickerHouse {
+  id: string;
+  name: string;
+  city: string | null;
+}
+
+/** Selector de casa hecho a medida, coherente con el resto de la app. */
+function HousePicker({
+  houses,
+  selectedId,
+  onSelect,
+}: {
+  houses: PickerHouse[];
+  selectedId: string;
+  onSelect: (id: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function onPointerDown(event: PointerEvent) {
+      if (!containerRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  const selected = houses.find((h) => h.id === selectedId) ?? houses[0];
+
+  return (
+    <div ref={containerRef} className="relative mt-4 flex flex-col gap-1.5">
+      <Label id="house-picker-label">Casa</Label>
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-labelledby="house-picker-label"
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          "flex min-h-14 w-full items-center gap-3 rounded-2xl border bg-card px-4 py-2.5 text-left transition-colors",
+          open ? "border-primary" : "border-border hover:border-primary/60",
+        )}
+      >
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
+          <Home className="h-4.5 w-4.5" aria-hidden />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-semibold text-foreground">
+            {selected?.name ?? ""}
+          </span>
+          {selected?.city && (
+            <span className="block truncate text-xs text-muted-foreground">
+              {selected.city}
+            </span>
+          )}
+        </span>
+        <ChevronDown
+          className={cn(
+            "h-4 w-4 shrink-0 text-muted-foreground transition-transform",
+            open && "rotate-180",
+          )}
+          aria-hidden
+        />
+      </button>
+
+      {open && (
+        <ul
+          role="listbox"
+          aria-labelledby="house-picker-label"
+          className="absolute top-full z-50 mt-2 w-full rounded-2xl border border-border bg-card p-1.5 shadow-lg"
+        >
+          {houses.map((h) => {
+            const isSelected = h.id === selectedId;
+            return (
+              <li key={h.id} role="option" aria-selected={isSelected}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelect(h.id);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "flex min-h-12 w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors",
+                    isSelected ? "bg-secondary" : "hover:bg-secondary/50",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
+                      isSelected
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-primary",
+                    )}
+                  >
+                    <Home className="h-4 w-4" aria-hidden />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium text-foreground">
+                      {h.name}
+                    </span>
+                    {h.city && (
+                      <span className="block truncate text-xs text-muted-foreground">
+                        {h.city}
+                      </span>
+                    )}
+                  </span>
+                  {isSelected && (
+                    <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  )}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
