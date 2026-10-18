@@ -53,7 +53,7 @@ function todayIso(): string {
   return `${y}-${m}-${day}`;
 }
 
-/** Resalta el fragmento citado dentro del texto de la ficha. */
+/** Resalta el fragmento citado dentro del texto de la tarea. */
 function Highlighted({ text, excerpt }: { text: string; excerpt: string | null }) {
   if (!excerpt) return <>{text}</>;
   const idx = text.toLowerCase().indexOf(excerpt.toLowerCase());
@@ -197,7 +197,7 @@ function PlanesIaPage() {
           <Home className="h-8 w-8 text-primary" aria-hidden />
           <h1 className="text-base font-semibold text-card-foreground">Primero crea tu casa</h1>
           <p className="max-w-sm text-sm text-muted-foreground">
-            La IA trabaja sobre las fichas de tu casa. Crea la casa desde el Resumen y vuelve aquí.
+            La IA trabaja sobre las tareas de tu casa. Crea la casa desde el Resumen y vuelve aquí.
           </p>
           <Link to="/inicio">
             <Button variant="secondary" size="sm">Ir al Resumen</Button>
@@ -310,7 +310,7 @@ function PlanesIaPage() {
                 required
               />
               <p className="text-xs text-muted-foreground">
-                La IA solo usa lo que digan tus fichas y esta descripción: si falta un dato, te lo
+                La IA solo usa lo que digan tus tareas y esta descripción: si falta un dato, te lo
                 preguntará en lugar de inventarlo.
               </p>
             </div>
@@ -446,7 +446,7 @@ function PlanesIaPage() {
           </div>
           <p className="text-xs text-muted-foreground">
             El plan se creará como «Sin cuidador»: después podrás invitar a tu cuidador desde la
-            ficha del plan.
+            página del plan.
           </p>
         </div>
       )}
