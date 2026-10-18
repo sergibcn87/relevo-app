@@ -229,21 +229,11 @@ function FichasPage() {
       </div>
 
       {houses.length > 1 && (
-        <div className="mt-4 flex flex-col gap-1.5">
-          <Label htmlFor="house-picker">Casa</Label>
-          <select
-            id="house-picker"
-            value={house?.id ?? ""}
-            onChange={(e) => setSelectedHouseId(e.target.value)}
-            className="h-11 rounded-xl border border-input bg-card px-3 text-sm text-foreground"
-          >
-            {houses.map((h) => (
-              <option key={h.id} value={h.id}>
-                {h.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <HousePicker
+          houses={houses}
+          selectedId={house?.id ?? ""}
+          onSelect={setSelectedHouseId}
+        />
       )}
 
       {isLoading ? (
