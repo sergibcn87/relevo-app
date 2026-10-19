@@ -6,7 +6,7 @@ import { createLovableAiGatewayRunIdFetch } from "@/lib/ai/run-id";
  * Crear plan con IA (bloque 5 del PRD).
  * - Modelo por defecto del gateway, endpoint /v1/responses con salida JSON
  *   estricta (json_schema).
- * - Trazabilidad: cada tarea cita un fragmento literal de su ficha; el
+ * - Trazabilidad: cada tarea cita un fragmento literal de su tarea de cuidado; el
  *   servidor descarta cualquier tarea cuyo fragmento no se pueda verificar.
  * - Nada se activa sin confirmación: la propuesta se guarda como
  *   ai_proposals.status = 'borrador' y solo confirmPlanProposal crea el plan.
@@ -75,13 +75,13 @@ const PROPOSAL_SCHEMA = {
                 additionalProperties: false,
                 required: ["card_id", "title", "instructions", "source_excerpt"],
                 properties: {
-                  card_id: { type: "string", description: "id exacto de la ficha origen" },
+                  card_id: { type: "string", description: "id exacto de la tarea de cuidado origen" },
                   title: { type: "string" },
                   instructions: { type: "string" },
                   source_excerpt: {
                     type: "string",
                     description:
-                      "Fragmento literal copiado de la ficha (nombre, instrucciones o nota importante) que justifica la tarea",
+                      "Fragmento literal copiado de la tarea de cuidado (nombre, instrucciones o nota importante) que justifica la tarea",
                   },
                 },
               },
@@ -103,22 +103,22 @@ const PROPOSAL_SCHEMA = {
   },
 } as const;
 
-const SYSTEM_PROMPT = `Eres el asistente de planes de Relevo, una app para organizar el cuidado de casas (plantas, mascotas y hogar) durante las ausencias del propietario. A partir de la descripción de la ausencia y de las fichas de cuidado existentes, propones las visitas y las tareas del plan.
+const SYSTEM_PROMPT = `Eres el asistente de planes de Relevo, una app para organizar el cuidado de casas (plantas, mascotas y hogar) durante las ausencias del propietario. A partir de la descripción de la ausencia y de las tareas de cuidado existentes (lista «tareas_de_cuidado»), propones las visitas y las tareas de cada visita.
 
 Reglas estrictas:
-- No inventes cantidades, horarios, frecuencias ni cuidados que no aparezcan en las fichas o en la descripción del propietario.
-- Cada tarea debe basarse en una ficha concreta: usa su card_id exacto y copia en source_excerpt el fragmento literal de esa ficha (de su nombre, instrucciones o nota importante) que justifica la tarea. No parafrasees el fragmento: cópialo tal cual.
+- No inventes cantidades, horarios, frecuencias ni cuidados que no aparezcan en las tareas de cuidado o en la descripción del propietario.
+- Cada tarea de visita debe basarse en una tarea de cuidado concreta: usa su card_id exacto y copia en source_excerpt el fragmento literal de esa tarea de cuidado (de su nombre, instrucciones o nota importante) que la justifica. No parafrasees el fragmento: cópialo tal cual.
 - Las visitas solo pueden caer dentro de las fechas del plan (salida y vuelta incluidas). Usa horas razonables en formato HH:MM (24 h).
-- Si la descripción contradice una ficha, respeta la ficha y anota la contradicción en warnings.
-- Si falta un dato importante (por ejemplo, cada cuánto regar una planta), no lo inventes: añade una pregunta en questions y crea la tarea solo si la ficha ya lo especifica.
-- Reparte las tareas entre las visitas según la frecuencia que indique cada ficha; si una ficha no indica frecuencia, inclúyela en todas las visitas.
+- Si la descripción contradice una tarea de cuidado, respeta la tarea de cuidado y anota la contradicción en warnings.
+- Si falta un dato importante (por ejemplo, cada cuánto regar una planta), no lo inventes: añade una pregunta en questions y crea la tarea solo si la tarea de cuidado ya lo especifica.
+- Reparte las tareas entre las visitas según la frecuencia que indique cada tarea de cuidado; si una tarea de cuidado no indica frecuencia, inclúyela en todas las visitas.
 - Escribe todo en español de España.`;
 
 function normalize(text: string): string {
   return text.toLowerCase().replace(/\s+/g, " ").trim();
 }
 
-/** Comprueba que el fragmento es literal dentro del contenido de la ficha. */
+/** Comprueba que el fragmento es literal dentro del contenido de la tarea de cuidado. */
 function excerptIsVerifiable(excerpt: string, card: CardRow): boolean {
   const haystack = normalize(
     [card.name, card.instructions, card.important_note ?? ""].join("\n"),
@@ -151,7 +151,7 @@ function validateProposal(
     for (const task of visit.tasks ?? []) {
       const card = cardMap.get(task.card_id);
       if (!card) {
-        dropped.push(`Se descartó una tarea sin ficha conocida («${task.title}»).`);
+        dropped.push(`Se descartó «${task.title}»: no corresponde a ninguna de tus tareas.`);
         continue;
       }
       if (!task.title.trim() || !task.instructions.trim()) {
@@ -160,7 +160,7 @@ function validateProposal(
       }
       if (!excerptIsVerifiable(task.source_excerpt, card)) {
         dropped.push(
-          `Se descartó «${task.title}»: la IA no citó un fragmento literal de la ficha.`,
+          `Se descartó «${task.title}»: la IA no citó un fragmento literal de su tarea de origen.`,
         );
         continue;
       }
@@ -298,7 +298,7 @@ export const generatePlanProposal = createServerFn({ method: "POST" })
       return { ok: false as const, error: "Revisa las fechas: la vuelta no puede ser antes de la salida." };
     }
 
-    // La casa y las fichas se leen con RLS: solo el propietario llega aquí.
+    // La casa y las tareas se leen con RLS: solo el propietario llega aquí.
     const { data: house } = await supabase
       .from("houses")
       .select("id, name, timezone")
@@ -314,7 +314,7 @@ export const generatePlanProposal = createServerFn({ method: "POST" })
       .order("created_at", { ascending: true });
     const cardRows = (cards ?? []) as CardRow[];
     if (cardRows.length === 0) {
-      return { ok: false as const, error: "Esta casa aún no tiene fichas activas. Crea al menos una ficha antes de usar la IA." };
+      return { ok: false as const, error: "Esta casa aún no tiene tareas activas. Crea al menos una antes de usar la IA." };
     }
 
     const userPayload = {
@@ -322,7 +322,7 @@ export const generatePlanProposal = createServerFn({ method: "POST" })
       titulo_sugerido: title.trim() || null,
       fechas: { salida: startDate, vuelta: endDate },
       casa: house.name,
-      fichas: cardRows.map((c) => ({
+      tareas_de_cuidado: cardRows.map((c) => ({
         id: c.id,
         nombre: c.name,
         categoria: c.category,
@@ -412,7 +412,7 @@ export const generatePlanProposal = createServerFn({ method: "POST" })
         ok: false as const,
         error: nothingNeeded
           ? "La IA no propone ninguna visita para estas fechas."
-          : "La IA no ha podido proponer visitas con tareas verificables. Revisa las preguntas y avisos, completa tus fichas e inténtalo de nuevo.",
+          : "La IA no ha podido proponer visitas con tareas verificables. Revisa las preguntas y avisos, completa tus tareas e inténtalo de nuevo.",
         warnings: proposal.general_note
           ? [proposal.general_note, ...proposal.warnings]
           : proposal.warnings,
@@ -461,7 +461,7 @@ export const confirmPlanProposal = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!house) return { ok: false as const, error: "No se ha encontrado la casa." };
 
-    // Revalidar contra las fichas actuales por si cambiaron desde la propuesta.
+    // Revalidar contra las tareas actuales por si cambiaron desde la propuesta.
     const { data: cards } = await supabase
       .from("care_cards")
       .select("id, name, category, room, instructions, important_note")
@@ -475,7 +475,7 @@ export const confirmPlanProposal = createServerFn({ method: "POST" })
       row.end_date,
     );
     if (proposal.visits.length === 0) {
-      return { ok: false as const, error: "Las fichas han cambiado y la propuesta ya no es válida. Genera una nueva." };
+      return { ok: false as const, error: "Las tareas han cambiado y la propuesta ya no es válida. Genera una nueva." };
     }
 
     // Nada se activa hasta aquí: el usuario ya ha confirmado la revisión.

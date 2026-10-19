@@ -7,8 +7,8 @@ Idioma: español de España · Formato 24 h · Zona horaria inicial Europe/Madri
 ## Funcionalidades
 
 - Cuenta con correo y contraseña, recuperación de contraseña, rutas privadas.
-- Casas con estancias y ciudad; fichas de cuidado (planta / mascota / casa) con foto privada.
-- Planes con asistente manual (3 pasos) o **con IA** (revisión en dos columnas, cada tarea cita un fragmento literal de su ficha; nada se crea sin confirmar).
+- Casas con estancias y ciudad; tareas de cuidado (planta / mascota / casa) con foto privada.
+- Planes con asistente manual (3 pasos) o **con IA** (revisión en dos columnas, cada tarea cita un fragmento literal de su tarea de origen; nada se crea sin confirmar).
 - Invitación de cuidador con enlace seguro (7 días, un solo uso, revocable), también para personas sin cuenta.
 - Vista reducida de cuidador: solo Visitas, Avisos y Cuenta.
 - Visitas: marcar tareas, omitir con motivo, nota y foto, incidencias, cierre automático al terminar.
