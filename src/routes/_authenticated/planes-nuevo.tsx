@@ -37,9 +37,9 @@ export const Route = createFileRoute("/_authenticated/planes-nuevo")({
   head: () => ({
     meta: [
       { title: "Nuevo plan — Relevo" },
-      { name: "description", content: "Crea una ausencia paso a paso: fechas, fichas y visitas." },
+      { name: "description", content: "Crea una ausencia paso a paso: fechas, tareas y visitas." },
       { property: "og:title", content: "Nuevo plan — Relevo" },
-      { property: "og:description", content: "Crea una ausencia paso a paso: fechas, fichas y visitas." },
+      { property: "og:description", content: "Crea una ausencia paso a paso: fechas, tareas y visitas." },
     ],
   }),
   component: NuevoPlanPage,
